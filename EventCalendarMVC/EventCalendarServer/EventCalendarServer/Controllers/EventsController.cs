@@ -22,11 +22,12 @@ namespace EventCalendarServer.Controllers
             return View();
         }
         */
-
+        /*
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
+        */
 
         private readonly ILogger<EventsController> _logger;
 
@@ -35,8 +36,10 @@ namespace EventCalendarServer.Controllers
             _logger = logger;
         }
 
+
+        [Route("Month")]
         [HttpGet]
-        public IEnumerable<CalendarEventData> Get()
+        public IEnumerable<CalendarEventData> GetMonthEvents()
         {
             var db = new CalendarEventData();
 
@@ -46,21 +49,38 @@ namespace EventCalendarServer.Controllers
             return null;
         }
 
+
+
+
+        [Route("Day")]
+        [HttpGet]
+        public IEnumerable<CalendarEventData> GetMonthDayEvents()
+        {
+            var db = new CalendarEventData();
+
+
+
+
+            return null;
+        }
+
+        [Route("Add")]
         [HttpPost]
-        public IAsyncDisposable PostEvent()
+        public IAsyncDisposable AddEvent(DateTime date, string title, string comment)
         {
             using (var db = new CalendarEventData())
             {
+                
                 var eventContents = new EventsContents()
                 {
                     CommentId = 1,
-                    Comment = "HELLO",
-                    Title = "Hello",
+                    Comment = comment,
+                    Title = title,
                 };
                 var events = new Events()
                 {
                     EventId = 1,
-                    Created = new DateTime(2020,5,5),
+                    Created = date,
                     EventsContents = eventContents
                 };
 
