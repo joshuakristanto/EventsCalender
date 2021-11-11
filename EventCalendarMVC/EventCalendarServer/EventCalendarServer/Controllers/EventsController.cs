@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +8,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection.PortableExecutable;
+using System.Runtime.CompilerServices;
 using EventCalendarServer.Models;
+using Microsoft.AspNetCore.Cors;
 
 namespace EventCalendarServer.Controllers
 {
@@ -16,18 +19,6 @@ namespace EventCalendarServer.Controllers
     public class EventsController : Controller
     {
 
-        /*
-        public IActionResult Index()
-        {
-            return View();
-        }
-        */
-        /*
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-        */
 
         private readonly ILogger<EventsController> _logger;
 
@@ -39,14 +30,48 @@ namespace EventCalendarServer.Controllers
 
         [Route("Month")]
         [HttpGet]
-        public IEnumerable<CalendarEventData> GetMonthEvents()
+        public IEnumerable GetMonthEvents( int month)
         {
-            var db = new CalendarEventData();
+            using (var db = new CalendarEventData())
+            {
+                var localEvent = db.Events;
 
-            
+                var localEventComplete = localEvent.Where(c => c.Month == month).Include(c=>c.EventsContents).ToList();
+                foreach (var events in localEventComplete)
+                {
+                    Console.WriteLine("Order: order.Created");
+                    
+                    //var comm =localComment.Find(events.EventsContents);
+                    
+
+                    yield return events ;
+                }
+
+            }
 
 
-            return null;
+
+        }
+
+
+
+        [Route("MonthComments")]
+        [HttpGet]
+        public IEnumerable GetMonthEventContents()
+        {
+            using (var db = new CalendarEventData())
+            {
+                var localEvent = db.EventsContents;
+
+
+                foreach (var events in localEvent)
+                {
+                    Console.WriteLine("Order: order.Created");
+                    yield return events;
+                }
+
+            }
+
         }
 
 
@@ -54,14 +79,14 @@ namespace EventCalendarServer.Controllers
 
         [Route("Day")]
         [HttpGet]
-        public IEnumerable<CalendarEventData> GetMonthDayEvents()
+        public IEnumerable GetMonthDayEvents( DateTime date)
         {
             var db = new CalendarEventData();
 
 
+            var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).Include(c => c.EventsContents); 
 
-
-            return null;
+            return results;
         }
 
         [Route("Add")]
@@ -71,16 +96,23 @@ namespace EventCalendarServer.Controllers
             using (var db = new CalendarEventData())
             {
                 
+                
+                
                 var eventContents = new EventsContents()
                 {
-                    CommentId = 1,
+                   CommentCreated = date,
                     Comment = comment,
                     Title = title,
+
                 };
                 var events = new Events()
                 {
-                    EventId = 1,
+                    
                     Created = date,
+                    CommentCreated = date,
+                    Year = date.Year,
+                    Month = date.Month,
+                    Day = date.Day,
                     EventsContents = eventContents
                 };
 
@@ -91,10 +123,39 @@ namespace EventCalendarServer.Controllers
 
             };
             
-       
 
            // var db = new CalendarEventData();
-           
+
+           return null;
+        }
+
+        [Route("Delete")]
+        [HttpPost]
+        public IAsyncDisposable DeleteEvent(DateTime date)
+        {
+            using (var db = new CalendarEventData())
+            {
+
+                var results = db.Events.Where(p =>
+                    p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
+                    p.Created.Value.Date.Year == date.Year).ToArray();
+
+                var resultsEventContent = db.EventsContents.Where(p =>
+                    p.CommentCreated.Value.Date.Day == date.Day && p.CommentCreated.Value.Date.Month == date.Month &&
+                    p.CommentCreated.Value.Date.Year == date.Year).ToArray();
+                var eventContents = resultsEventContent[0];
+                var events = results[0];
+                db.EventsContents.Remove(eventContents);
+                db.Events.Remove(events);
+                db.SaveChangesAsync();
+
+
+            };
+
+
+
+            // var db = new CalendarEventData();
+
 
             return null;
         }

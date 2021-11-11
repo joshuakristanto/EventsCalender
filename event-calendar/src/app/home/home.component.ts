@@ -61,13 +61,14 @@ export class HomeComponent {
     
     console.log(date);
     // alert(date +" EVENTS" );
-    this.open( Months[date.getMonth()]+" "+date.getDate()+", " + date.getFullYear(), "events[0].title");
+    this.open( Months[date.getMonth()]+" "+date.getDate()+", " + date.getFullYear(), "events[0].title", date);
     //this.openAppointmentList(date)
   }
 
-  open(  date : any, event : any) {
+  open(  date : any, event : any, dateFormat:Date) {
     const modalRef = this.modalService.open(ViewEventComponent);
     modalRef.componentInstance.my_modal_title = date;
-    modalRef.componentInstance.my_modal_content = "EVENT";
+    modalRef.componentInstance.my_modal_content = "No Events";
+    modalRef.componentInstance.date = dateFormat;
   }
   }

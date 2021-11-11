@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EventCalendarServer.Migrations
 {
-    public partial class InitalCreate : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,40 +11,41 @@ namespace EventCalendarServer.Migrations
                 name: "EventsContents",
                 columns: table => new
                 {
-                    CommentId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    CommentCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Title = table.Column<string>(type: "TEXT", nullable: true),
                     Comment = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventsContents", x => x.CommentId);
+                    table.PrimaryKey("PK_EventsContents", x => x.CommentCreated);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Events",
                 columns: table => new
                 {
-                    EventId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Created = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    EventsContentsCommentId = table.Column<int>(type: "INTEGER", nullable: true)
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Year = table.Column<int>(type: "INTEGER", nullable: false),
+                    Month = table.Column<int>(type: "INTEGER", nullable: false),
+                    Day = table.Column<int>(type: "INTEGER", nullable: false),
+                    CommentCreated = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    EventsContentsCommentCreated = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Events", x => x.EventId);
+                    table.PrimaryKey("PK_Events", x => x.Created);
                     table.ForeignKey(
-                        name: "FK_Events_EventsContents_EventsContentsCommentId",
-                        column: x => x.EventsContentsCommentId,
+                        name: "FK_Events_EventsContents_EventsContentsCommentCreated",
+                        column: x => x.EventsContentsCommentCreated,
                         principalTable: "EventsContents",
-                        principalColumn: "CommentId",
+                        principalColumn: "CommentCreated",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Events_EventsContentsCommentId",
+                name: "IX_Events_EventsContentsCommentCreated",
                 table: "Events",
-                column: "EventsContentsCommentId");
+                column: "EventsContentsCommentCreated");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

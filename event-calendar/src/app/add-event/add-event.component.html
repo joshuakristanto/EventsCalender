@@ -13,20 +13,20 @@
       <mat-label>Favorite food</mat-label> -->
       
       <div style="align-items: center;">
-        <input matInput placeholder="Title" value="Title">
+        <input matInput placeholder="Title" value="Title" #Title>
       </div>
     <!-- </mat-form-field> -->
   
     <!-- <mat-form-field class="example-full-width" appearance="fill">
       <mat-label>Leave a comment</mat-label> -->
       <div style="align-items: center;">
-      <textarea matInput placeholder="Add Additional Details"></textarea>
+      <textarea matInput placeholder="Add Additional Details" #Comments ></textarea>
     </div>
     <!-- </mat-form-field> -->
   </form>
 
   <div class="modal-footer">
     
-    <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')" style="background-color: green; color:white;">Submit</button>
+    <button type="button" class="btn btn-outline-dark" (click)="addEvent(date, Title.value, Comments.value)" style="background-color: green; color:white;">Submit</button>
     <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')" style="background-color: red; color: white;">Cancel</button>
   </div>

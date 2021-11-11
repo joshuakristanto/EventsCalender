@@ -18,28 +18,35 @@ namespace EventCalendarServer.Migrations
 
             modelBuilder.Entity("EventCalendarServer.Models.Events", b =>
                 {
-                    b.Property<int>("EventId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime?>("Created")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("EventsContentsCommentId")
+                    b.Property<DateTime?>("CommentCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Day")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("EventId");
+                    b.Property<DateTime?>("EventsContentsCommentCreated")
+                        .HasColumnType("TEXT");
 
-                    b.HasIndex("EventsContentsCommentId");
+                    b.Property<int>("Month")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Created");
+
+                    b.HasIndex("EventsContentsCommentCreated");
 
                     b.ToTable("Events");
                 });
 
             modelBuilder.Entity("EventCalendarServer.Models.EventsContents", b =>
                 {
-                    b.Property<int>("CommentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTime?>("CommentCreated")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Comment")
                         .HasColumnType("TEXT");
@@ -47,7 +54,7 @@ namespace EventCalendarServer.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("CommentId");
+                    b.HasKey("CommentCreated");
 
                     b.ToTable("EventsContents");
                 });
@@ -56,7 +63,7 @@ namespace EventCalendarServer.Migrations
                 {
                     b.HasOne("EventCalendarServer.Models.EventsContents", "EventsContents")
                         .WithMany()
-                        .HasForeignKey("EventsContentsCommentId");
+                        .HasForeignKey("EventsContentsCommentCreated");
 
                     b.Navigation("EventsContents");
                 });
