@@ -5,12 +5,13 @@ import { NgbActiveModal, NgbDateParserFormatter, NgbModal, NgbModalOptions } fro
 import { FormBuilder } from '@angular/forms';
 import { stringify } from '@angular/compiler/src/util';
 import { ViewEventComponent } from '../view-event/view-event.component';
-
+export type Update = { update: string };
 @Component({
   selector: 'app-add-event',
   templateUrl: './add-event.component.html',
   styleUrls: ['./add-event.component.css']
 })
+
 export class AddEventComponent implements OnInit {
   title: string = '';
   comment: string = '';
@@ -18,7 +19,7 @@ export class AddEventComponent implements OnInit {
   @Input() my_modal_title: any;
   @Input() my_modal_content: any;
   @Input() date: any;
-
+  @Output() update = new EventEmitter<any>();
   message: string = "Update"
   modalOptions:NgbModalOptions;
  
@@ -62,9 +63,9 @@ addEvent( date:Date, localTitle: string, localComment: string){
 
 
     
-
+     this.update.emit({update: "Update"});
 this.activeModal.close("Close click");
-this.updateEvent(date);
+// this.updateEvent(date);
   
 
 }

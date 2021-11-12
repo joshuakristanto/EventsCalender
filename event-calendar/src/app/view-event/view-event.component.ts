@@ -1,4 +1,4 @@
-import { Component, Input, NgModuleRef, OnInit } from '@angular/core';
+import { Component, Input, NgModuleRef, OnInit, Output, EventEmitter } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { startOfDay } from 'date-fns';
 import { CalendarView, CalendarEvent } from 'angular-calendar';
@@ -17,6 +17,7 @@ export class ViewEventComponent implements OnInit {
   @Input() my_modal_content: any;
   @Input() my_modal_comment: any;
   @Input() date: any;
+  @Output() update = new EventEmitter<any>();
   modalOptions:NgbModalOptions;
 
   constructor(public activeModal: NgbActiveModal, private modalService :NgbModal, private http: HttpClient) {
@@ -73,7 +74,15 @@ console.log(result[0]['eventsContents']['title']);
     modalRef.componentInstance.my_modal_content = "EVENT";
     console.log("DATE" + ":" + date);
     modalRef.componentInstance.date = date;
-    this.activeModal.close('Close click');
+    // this.activeModal.close('Close click');
+    modalRef.componentInstance.update.subscribe((event:any)=>
+    {
+      this.updateEvent();
+      this.update.emit({update: "Update"});
+    })
+    // modalRef.componentInstance["Update"].subscribe((event: any) => {
+    //   console.log(" EVENT" +event) //< you now have access to the event that was emitted, to pass to your grandfather component.
+    //  });
 
   
   }
