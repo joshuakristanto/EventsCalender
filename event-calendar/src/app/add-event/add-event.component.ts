@@ -58,12 +58,12 @@ addEvent( date:Date, localTitle: string, localComment: string){
     );
 
   this.http.post<Event>("https://localhost:44382/Events/Add", body,({headers: header, params:param}) ).subscribe(result => {
-    
+    this.update.emit({update: "Update"});
      }, error => console.error(error));
 
 
     
-     this.update.emit({update: "Update"});
+    
 this.activeModal.close("Close click");
 // this.updateEvent(date);
   

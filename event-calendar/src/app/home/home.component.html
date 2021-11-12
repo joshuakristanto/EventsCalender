@@ -24,13 +24,13 @@
 
         <div class="col-md-4">
             <div class="btn-group">
-                <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate">
+                <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"  (click) = "pastMonth()">
                     Previous
                 </div>
                 <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
                     Today
                 </div>
-                <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate">
+                <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (click) = "nextMonth()">
                     Next
                 </div>
             </div>

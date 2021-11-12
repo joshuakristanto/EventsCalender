@@ -18,6 +18,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 export class HomeComponent {
   title = 'event-calendar';
   viewDate: Date = new Date();
+  currentMonth : number = new Date().getMonth();
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   refresh: Subject<any> = new Subject(); 
@@ -47,7 +48,7 @@ export class HomeComponent {
   }
 
   ngOnInit() {
-    this.getCalendarEvents();
+    this.getCalendarEvents(new Date().getMonth()+1 );
     this.refresh.next();
    
   }
@@ -55,10 +56,10 @@ export class HomeComponent {
   
 
 
-  getCalendarEvents(){
+  getCalendarEvents( months :number){
     this.events = [];
     const param = new HttpParams()
-    .append('month', 11);
+    .append('month', months);
 
   const body = JSON.stringify("");
 
@@ -118,8 +119,19 @@ export class HomeComponent {
     modalRef.componentInstance.date = dateFormat;
     modalRef.componentInstance.update.subscribe((event:any)=>
     {
-      this.getCalendarEvents();
+      this.getCalendarEvents(dateFormat.getMonth()+1 );
     this.refresh.next();
     })
+  }
+
+  nextMonth(){
+    this.currentMonth =  this.currentMonth + 1;
+    this.getCalendarEvents(this.currentMonth+1 );
+    this.refresh.next();
+  }
+  pastMonth(){
+    this.currentMonth =  this.currentMonth - 1;
+    this.getCalendarEvents(this.currentMonth+1 );
+    this.refresh.next();
   }
 }

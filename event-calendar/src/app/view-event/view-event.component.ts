@@ -77,6 +77,7 @@ console.log(result[0]['eventsContents']['title']);
     // this.activeModal.close('Close click');
     modalRef.componentInstance.update.subscribe((event:any)=>
     {
+      // setTimeout(() => {  console.log("World!"); }, 2000);
       this.updateEvent();
       this.update.emit({update: "Update"});
     })
