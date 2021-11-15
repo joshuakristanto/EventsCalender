@@ -25,6 +25,7 @@ namespace EventCalendarServer.Models
 
        
     }
+    /*
     public class Events
     {
         
@@ -47,7 +48,8 @@ namespace EventCalendarServer.Models
 
        // public ICollection<EventItems> Items { get; set; }
     }
-
+    */
+    /*
     public class EventsContents
     {
         [Key]
@@ -58,4 +60,5 @@ namespace EventCalendarServer.Models
 
         // public ICollection<EventItems> Items { get; set; }
     }
+    */
 }

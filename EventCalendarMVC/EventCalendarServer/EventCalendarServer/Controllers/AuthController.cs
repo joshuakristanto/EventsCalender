@@ -79,6 +79,21 @@ namespace EventCalendarServer.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("Logout")]
+
+        public async Task<IActionResult> Logout(string UserName, string Password)
+        {
+            
+            ApplicationUser user = new()
+            {
+                UserName = UserName,
+                Email = $"{UserName}@gmail.com",
+                EmailConfirmed = true
+            };
+            var result = await _userManager.CreateAsync(user, Password);
+            return Ok(result);
+        }
 
 
     }
