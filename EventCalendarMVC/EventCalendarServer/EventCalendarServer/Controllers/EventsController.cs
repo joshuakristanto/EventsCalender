@@ -10,6 +10,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using EventCalendarServer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 
 namespace EventCalendarServer.Controllers
@@ -27,16 +28,16 @@ namespace EventCalendarServer.Controllers
             _logger = logger;
         }
 
-
+        
         [Route("Month")]
         [HttpGet]
-        public IEnumerable GetMonthEvents( int month)
+        public IEnumerable GetMonthEvents( int month, int year)
         {
             using (var db = new CalendarEventData())
             {
                 var localEvent = db.Events;
 
-                var localEventComplete = localEvent.Where(c => c.Month == month).Include(c=>c.EventsContents).ToList();
+                var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Include(c=>c.EventsContents).ToList();
                 foreach (var events in localEventComplete)
                 {
                     Console.WriteLine("Order: order.Created");
@@ -75,8 +76,7 @@ namespace EventCalendarServer.Controllers
         }
 
 
-
-
+        [Authorize]
         [Route("Day")]
         [HttpGet]
         public IEnumerable GetMonthDayEvents( DateTime date)

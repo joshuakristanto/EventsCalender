@@ -10,7 +10,13 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using EventCalendarServer.Identity;
 
 namespace EventCalendarServer
 {
@@ -35,6 +41,35 @@ namespace EventCalendarServer
             services.AddCors(options => options.AddPolicy("AllowEverything", p =>
 
                 p.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(_ => true)));
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlite("Data Source=databaseIdentity.db"));
+            
+
+            services.AddIdentityCore<ApplicationUser>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddAuthentication(opt =>
+                {
+                    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(opt =>
+                {
+                    opt.TokenValidationParameters = new()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+
+                        ValidIssuer = "https://localhost:44382/",
+                        ValidAudience = "https://localhost:44200/",
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("CSUN590@8:59PM#cretKey"))
+
+                    };
+
+                });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +87,8 @@ namespace EventCalendarServer
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

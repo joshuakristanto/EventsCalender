@@ -46,12 +46,13 @@ export class ViewEventComponent implements OnInit {
 
 
 const body=JSON.stringify("");
-
+console.log(`Bearer ` +  localStorage.getItem('jwt'));
 const header = new HttpHeaders()
   .append(
     'Content-Type',
     'application/json'
-  );
+  )
+  .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
 
 this.http.get<any>("https://localhost:44382/Events/Day", ({headers: header, params:param}) ).subscribe(result => {
 
@@ -95,6 +96,7 @@ console.log(result[0]['eventsContents']['title']);
 const body=JSON.stringify("");
 
 const header = new HttpHeaders()
+.append('Authorization', `Bearer ` + localStorage.getItem('jwt'))
   .append(
     'Content-Type',
     'application/json'
@@ -122,13 +124,16 @@ console.log(result[0]['eventsContents']['title']);
   
     const body=JSON.stringify("");
   
+    let token = localStorage.getItem('jwt');
     const header = new HttpHeaders()
-      .append(
-        'Content-Type',
-        'application/json'
-      );
-  
+    .append(
+      'Content-Type',
+      'application/json'
+    )
+    .append ('Authorization', `Bearer ${token}`);
     this.http.post<Event>("https://localhost:44382/Events/Delete", body,({headers: header, params:param}) ).subscribe(result => {
+      this.updateEvent();
+      this.update.emit({update: "Update"});
       
        }, error => console.error(error));
   

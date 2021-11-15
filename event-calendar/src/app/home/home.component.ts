@@ -19,6 +19,7 @@ export class HomeComponent {
   title = 'event-calendar';
   viewDate: Date = new Date();
   currentMonth : number = new Date().getMonth();
+  currentYear: number = new Date().getFullYear();
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   refresh: Subject<any> = new Subject(); 
@@ -48,7 +49,7 @@ export class HomeComponent {
   }
 
   ngOnInit() {
-    this.getCalendarEvents(new Date().getMonth()+1 );
+    this.getCalendarEvents(new Date().getMonth()+1 , new Date().getFullYear());
     this.refresh.next();
    
   }
@@ -56,10 +57,11 @@ export class HomeComponent {
   
 
 
-  getCalendarEvents( months :number){
+  getCalendarEvents( months :number, years: number){
     this.events = [];
     const param = new HttpParams()
-    .append('month', months);
+    .append('month', months)
+    .append('year', years);
 
   const body = JSON.stringify("");
 
@@ -119,19 +121,24 @@ export class HomeComponent {
     modalRef.componentInstance.date = dateFormat;
     modalRef.componentInstance.update.subscribe((event:any)=>
     {
-      this.getCalendarEvents(dateFormat.getMonth()+1 );
+      this.getCalendarEvents(dateFormat.getMonth()+1 , dateFormat.getFullYear());
     this.refresh.next();
     })
   }
 
   nextMonth(){
     this.currentMonth =  this.currentMonth + 1;
-    this.getCalendarEvents(this.currentMonth+1 );
+    if(this.currentMonth >12 )
+    {
+      this.currentMonth = 0;
+      this.currentYear = this.currentYear + 1;
+    }
+    this.getCalendarEvents(this.currentMonth+1, this.currentYear );
     this.refresh.next();
   }
   pastMonth(){
     this.currentMonth =  this.currentMonth - 1;
-    this.getCalendarEvents(this.currentMonth+1 );
+    this.getCalendarEvents(this.currentMonth+1, this.currentYear );
     this.refresh.next();
   }
 }

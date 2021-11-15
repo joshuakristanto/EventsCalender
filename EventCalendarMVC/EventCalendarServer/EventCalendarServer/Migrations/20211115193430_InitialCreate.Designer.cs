@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventCalendarServer.Migrations
 {
     [DbContext(typeof(CalendarEventData))]
-    [Migration("20211111060242_InitialCreate")]
+    [Migration("20211115193430_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
