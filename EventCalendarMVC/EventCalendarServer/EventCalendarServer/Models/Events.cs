@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
@@ -27,6 +28,6 @@ namespace EventCalendarServer.Models
         public DateTime? CommentCreated { get; set; }
         public EventsContents EventsContents { get; set; }
 
-        // public ICollection<EventItems> Items { get; set; }
+     // public ICollection<EventsContents> Items { get; set; }
     }
 }

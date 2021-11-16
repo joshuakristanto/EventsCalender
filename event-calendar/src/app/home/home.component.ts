@@ -66,22 +66,23 @@ export class HomeComponent {
   const body = JSON.stringify("");
 
   const header = new HttpHeaders()
-    .append(
-      'Content-Type',
-      'application/json'
-    );
+  .append(
+    'Content-Type',
+    'application/json'
+  )
+  .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
 
   this.http.get<any>("https://localhost:44382/Events/Month", ({ headers: header, params: param })).subscribe(result => {
 
     console.log(result.toString())
     // var output = JSON.parse(result);
-    console.log("ADD-EVENT" + result[0]['eventsContents']['title']);
+    console.log("ADD-EVENT" + result[0]['title']);
    
     for (var item in result) { 
       // block of statements 
-      console.log("Home Results" + result[item]['created']);
-      var localDate = new Date(result[item]['created']);
-      this.events.push({start:  startOfDay(localDate) , title: result[item]['eventsContents']['title']})
+      console.log("Home Results" + result[item]['commentCreated']);
+      var localDate = new Date(result[item]['commentCreated']);
+      this.events.push({start:  startOfDay(localDate) , title: result[item]['title']})
       console.log(this.events);
   }
   this.refresh.next();

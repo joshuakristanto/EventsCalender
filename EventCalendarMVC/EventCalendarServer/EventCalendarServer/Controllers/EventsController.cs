@@ -17,7 +17,7 @@ namespace EventCalendarServer.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class EventsController : Controller
+    public class EventsController : ControllerBase
     {
 
 
@@ -28,7 +28,7 @@ namespace EventCalendarServer.Controllers
             _logger = logger;
         }
 
-        
+        //[Authorize]
         [Route("Month")]
         [HttpGet]
         public IEnumerable GetMonthEvents( int month, int year)
@@ -36,8 +36,12 @@ namespace EventCalendarServer.Controllers
             using (var db = new CalendarEventData())
             {
                 var localEvent = db.Events;
+                var localEventContent = db.EventsContents;
+                //Switch Include to Select. 
 
-                var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Include(c=>c.EventsContents).ToList();
+                //  var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Include(c=>c.EventsContents).ToList();
+                var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Select( c => c.EventsContents).ToList();
+
                 foreach (var events in localEventComplete)
                 {
                     Console.WriteLine("Order: order.Created");
@@ -55,7 +59,7 @@ namespace EventCalendarServer.Controllers
         }
 
 
-
+        [Authorize]
         [Route("MonthComments")]
         [HttpGet]
         public IEnumerable GetMonthEventContents()
@@ -84,11 +88,11 @@ namespace EventCalendarServer.Controllers
             var db = new CalendarEventData();
 
 
-            var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).Include(c => c.EventsContents); 
+            var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).Select(c => c.EventsContents); 
 
             return results;
         }
-
+        [Authorize]
         [Route("Add")]
         [HttpPost]
         public IAsyncDisposable AddEvent(DateTime date, string title, string comment)
@@ -128,7 +132,7 @@ namespace EventCalendarServer.Controllers
 
            return null;
         }
-
+        [Authorize]
         [Route("Delete")]
         [HttpPost]
         public IAsyncDisposable DeleteEvent(DateTime date)

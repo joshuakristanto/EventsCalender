@@ -52,10 +52,11 @@ addEvent( date:Date, localTitle: string, localComment: string){
   const body=JSON.stringify("");
 
   const header = new HttpHeaders()
-    .append(
-      'Content-Type',
-      'application/json'
-    );
+  .append(
+    'Content-Type',
+    'application/json'
+  )
+  .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
 
   this.http.post<Event>("https://localhost:44382/Events/Add", body,({headers: header, params:param}) ).subscribe(result => {
     this.update.emit({update: "Update"});
@@ -95,7 +96,9 @@ const header = new HttpHeaders()
 .append(
   'Content-Type',
   'application/json'
-);
+)
+.append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
+
 
 
 this.http.get<any>("https://localhost:44382/Events/Day", ({headers: header, params:param}) ).subscribe(result => {

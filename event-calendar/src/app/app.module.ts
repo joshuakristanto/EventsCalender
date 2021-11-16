@@ -21,6 +21,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatNativeDateModule} from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CreateAccountComponent } from './create-account/create-account.component';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     LoginComponent,
     AddEventComponent,
     ViewEventComponent,
+    CreateAccountComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,11 +54,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'login', component: LoginComponent },
+      { path: 'createAccount', component: CreateAccountComponent },
     ]),
     BrowserAnimationsModule
   ],
   entryComponents: [ ViewEventComponent,  LoginComponent,
-    AddEventComponent,],
+    AddEventComponent, CreateAccountComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

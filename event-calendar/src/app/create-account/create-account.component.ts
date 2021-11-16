@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import {NgForm} from '@angular/forms'
+import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-create-account',
+  templateUrl: './create-account.component.html',
+  styleUrls: ['./create-account.component.css']
 })
-export class LoginComponent implements OnInit {
+export class CreateAccountComponent implements OnInit {
 
   invalidLogin: boolean = false;
   constructor(private http: HttpClient , private router: Router, private route: ActivatedRoute) { }
@@ -32,14 +33,14 @@ const header = new HttpHeaders()
     'application/json'
   );
 
-this.http.post<any>("https://localhost:44382/api/Auth/Login", body,({headers: header, params:param}) ).subscribe(result => {
+this.http.post<any>("https://localhost:44382/api/Auth/Create", body,({headers: header, params:param}) ).subscribe(result => {
 
-const token = (<any> result).auth_token;
-console.log("jwt token: " + result.token);
-localStorage.setItem('jwt', result.token);
+// const token = (<any> result).auth_token;
+// console.log("jwt token: " + result.token);
+// localStorage.setItem('jwt', result.token);
 
 this.invalidLogin = false;
-this.router.navigate([`../`], { relativeTo: this.route });
+this.router.navigate([`../login`], { relativeTo: this.route });
 // var output = JSON.parse(result);
 // console.log(result[0]['eventsContents']['title']);
 // console.log(result[0]['eventContents']['comment']);
@@ -48,7 +49,5 @@ this.router.navigate([`../`], { relativeTo: this.route });
    }, error => console.error(error));
 
   }
-
-
 
 }

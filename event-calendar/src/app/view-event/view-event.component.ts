@@ -58,10 +58,10 @@ this.http.get<any>("https://localhost:44382/Events/Day", ({headers: header, para
 
 console.log(result.toString())
 // var output = JSON.parse(result);
-console.log(result[0]['eventsContents']['title']);
+console.log(result[0]['title']);
 // console.log(result[0]['eventContents']['comment']);
-    this.my_modal_content = result[0]['eventsContents']['title'];
-    this.my_modal_comment = result[0]['eventsContents']['comment']
+    this.my_modal_content = result[0]['title'];
+    this.my_modal_comment = result[0]['comment']
    }, error => console.error(error));
 
 
@@ -96,20 +96,19 @@ console.log(result[0]['eventsContents']['title']);
 const body=JSON.stringify("");
 
 const header = new HttpHeaders()
-.append('Authorization', `Bearer ` + localStorage.getItem('jwt'))
-  .append(
-    'Content-Type',
-    'application/json'
-  );
-
+.append(
+  'Content-Type',
+  'application/json'
+)
+.append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
 this.http.get<any>("https://localhost:44382/Events/Day", ({headers: header, params:param}) ).subscribe(result => {
 
 console.log(result.toString())
 // var output = JSON.parse(result);
-console.log(result[0]['eventsContents']['title']);
+console.log(result[0]['title']);
 // console.log(result[0]['eventContents']['comment']);
-    this.my_modal_content = result[0]['eventsContents']['title'];
-    this.my_modal_comment = result[0]['eventsContents']['comment']
+    this.my_modal_content = result[0]['title'];
+    this.my_modal_comment = result[0]['comment']
    }, error => console.error(error));
 
   }
