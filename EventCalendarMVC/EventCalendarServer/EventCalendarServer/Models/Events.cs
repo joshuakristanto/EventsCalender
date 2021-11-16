@@ -17,17 +17,18 @@ namespace EventCalendarServer.Models
         [Key]
         public DateTime? Created { get; set; }
 
-
+     
+        public string EventId { get; set; }
         public int Year { get; set; }
 
         public int Month { get; set; }
 
         public int Day { get; set; }
 
-        [ForeignKey("CommentCreated")]
-        public DateTime? CommentCreated { get; set; }
-        public EventsContents EventsContents { get; set; }
-
-     // public ICollection<EventsContents> Items { get; set; }
+        //   [ForeignKey("Id")]
+        //  public List <string> Id { get; set; }
+        //public EventsContents EventsContents { get; set; }
+        //[ForeignKey("Id")]
+        public virtual ICollection<EventsContents> Items { get; set; }
     }
 }

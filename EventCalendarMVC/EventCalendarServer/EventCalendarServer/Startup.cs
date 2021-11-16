@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using EventCalendarServer.Identity;
+using EventCalendarServer.Models;
 
 namespace EventCalendarServer
 {
@@ -44,7 +45,8 @@ namespace EventCalendarServer
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite("Data Source=databaseIdentity.db"));
-            
+
+          
 
             services.AddIdentityCore<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();

@@ -16,8 +16,15 @@ namespace EventCalendarServer.Models
     public class EventsContents
     {
         [Key]
-     //  public string id { get; set; }
-        public DateTime? CommentCreated { get; set; }
+        public string Id { get; set; }
+
+      //  [ForeignKey("Created")]
+       // public DateTime? CommentCreated { get; set; }
+
+        [ForeignKey ("EventId")]
+        public string EventId { get; set; }
+
+        public Events Events { get; set; }
         public string Title { get; set; }
 
         public string Comment { get; set; }

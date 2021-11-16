@@ -21,13 +21,10 @@ namespace EventCalendarServer.Migrations
                     b.Property<DateTime?>("Created")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("CommentCreated")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("Day")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("EventsContentsCommentCreated")
+                    b.Property<string>("EventId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Month")
@@ -38,34 +35,45 @@ namespace EventCalendarServer.Migrations
 
                     b.HasKey("Created");
 
-                    b.HasIndex("EventsContentsCommentCreated");
-
                     b.ToTable("Events");
                 });
 
             modelBuilder.Entity("EventCalendarServer.Models.EventsContents", b =>
                 {
-                    b.Property<DateTime?>("CommentCreated")
+                    b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Comment")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("EventId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("EventsCreated")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("CommentCreated");
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventsCreated");
 
                     b.ToTable("EventsContents");
                 });
 
+            modelBuilder.Entity("EventCalendarServer.Models.EventsContents", b =>
+                {
+                    b.HasOne("EventCalendarServer.Models.Events", "Events")
+                        .WithMany("Items")
+                        .HasForeignKey("EventsCreated");
+
+                    b.Navigation("Events");
+                });
+
             modelBuilder.Entity("EventCalendarServer.Models.Events", b =>
                 {
-                    b.HasOne("EventCalendarServer.Models.EventsContents", "EventsContents")
-                        .WithMany()
-                        .HasForeignKey("EventsContentsCommentCreated");
-
-                    b.Navigation("EventsContents");
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }
