@@ -28,9 +28,9 @@ namespace EventCalendarServer.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     EventId = table.Column<string>(type: "TEXT", nullable: true),
-                    EventsEventId = table.Column<string>(type: "TEXT", nullable: true),
                     Title = table.Column<string>(type: "TEXT", nullable: true),
-                    Comment = table.Column<string>(type: "TEXT", nullable: true)
+                    Comment = table.Column<string>(type: "TEXT", nullable: true),
+                    EventsEventId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

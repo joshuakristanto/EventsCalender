@@ -64,11 +64,9 @@ namespace EventCalendarServer.Migrations
 
             modelBuilder.Entity("EventCalendarServer.Models.EventsContents", b =>
                 {
-                    b.HasOne("EventCalendarServer.Models.Events", "Events")
+                    b.HasOne("EventCalendarServer.Models.Events", null)
                         .WithMany("Items")
                         .HasForeignKey("EventsEventId");
-
-                    b.Navigation("Events");
                 });
 
             modelBuilder.Entity("EventCalendarServer.Models.Events", b =>

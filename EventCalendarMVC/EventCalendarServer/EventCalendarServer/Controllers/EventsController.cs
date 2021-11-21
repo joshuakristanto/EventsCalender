@@ -108,9 +108,9 @@ namespace EventCalendarServer.Controllers
         {
             var db = new CalendarEventData();
                 
-           var results = db.EventsContents.Where(c => c.Events.Created == date);
+         //  var results = db.EventsContents.Where(c => c.Events.Created == date);
            
-            // var results = db.Events.Where(c => c.Created == date);
+             var results = db.Events.Where(c => c.Created == date);
 
             //   var results2 = db.Events.Single(c => c.Created == date.);
             return results;
@@ -143,7 +143,7 @@ namespace EventCalendarServer.Controllers
                         Comment = comment,
                         Title = title,
                         EventId = uniqueId,
-                        Events = eventLocal[0],
+                 //       Events = eventLocal[0],
 
                     };
                     dbContent[0].Add(eventContents);
@@ -172,7 +172,7 @@ namespace EventCalendarServer.Controllers
                         Comment = comment,
                         Title = title,
                         EventId = uniqueId,
-                        Events = events,
+                   //     Events = events,
 
                     };
                     events.Items.Add(eventContents);

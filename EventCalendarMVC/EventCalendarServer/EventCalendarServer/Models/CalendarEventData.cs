@@ -20,12 +20,17 @@ namespace EventCalendarServer.Models
         public DbSet<Events> Events { get; set; }
         public DbSet<EventsContents> EventsContents { get; set; }
 
+        /*
+        public CalendarEventData(DbContextOptions options) : base(options)
+        {
+        }
+        */
            protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
            {
-               optionsBuilder.UseSqlite("Data Source=database.db");
+               //optionsBuilder.UseSqlite("Data Source=database.db");
 
-
-           }
+               optionsBuilder.UseLazyLoadingProxies().UseSqlite("Data Source=database.db");
+        }
            protected override void OnModelCreating(ModelBuilder modelBuilder)
            {
             /* modelBuilder.Entity<EventsContents>()
@@ -34,13 +39,16 @@ namespace EventCalendarServer.Models
                  .HasForeignKey(p =>p.EventId)
                  .HasPrincipalKey(p => p.EventId);
             */
+            /*
             modelBuilder.Entity<Events>().HasMany(s => s.Items).WithOne(s => s.Events);
+            modelBuilder.Entity<EventsContents>().HasOne(e => e.Events).WithMany(e => e.Items);
             modelBuilder.Entity<Events>()
                 .Navigation(b => b.Items)
                 .UsePropertyAccessMode(PropertyAccessMode.Property);
             modelBuilder.Entity<EventsContents>()
                 .Navigation(b => b.Events)
                 .UsePropertyAccessMode(PropertyAccessMode.Property);
+            */
         }
 
 

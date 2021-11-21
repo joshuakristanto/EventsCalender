@@ -46,10 +46,13 @@ namespace EventCalendarServer
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite("Data Source=databaseIdentity.db"));
 
-          
-
+            /*
+            services.AddDbContext<CalendarEventData>(options =>
+                options.UseLazyLoadingProxies().UseSqlite("Data Source=database.db"));
+            */
             services.AddIdentityCore<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            
             services.AddAuthentication(opt =>
                 {
                     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
