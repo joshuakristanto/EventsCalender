@@ -15,6 +15,7 @@ namespace EventCalendarServer.Models
 {
     public class EventsContents
     {
+        
         [Key]
         public string Id { get; set; }
 
@@ -22,7 +23,7 @@ namespace EventCalendarServer.Models
        // public DateTime? CommentCreated { get; set; }
 
         [ForeignKey ("EventId")]
-        public string EventId { get; set; }
+        public string? EventId { get; set; }
 
         public Events Events { get; set; }
         public string Title { get; set; }

@@ -80,8 +80,9 @@ export class HomeComponent {
    
     for (var item in result) { 
       // block of statements 
-      console.log("Home Results" + result[item]['commentCreated']);
-      var localDate = new Date(result[item]['commentCreated']);
+      console.log("Home Results" , result[item]['created']);
+      var localDate = new Date(result[item]['created']);
+      
       this.events.push({start:  startOfDay(localDate) , title: result[item]['title']})
       console.log(this.events);
   }

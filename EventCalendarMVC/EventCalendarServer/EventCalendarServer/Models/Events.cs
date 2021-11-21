@@ -14,10 +14,13 @@ namespace EventCalendarServer.Models
 {
     public class Events
     {
-        [Key]
+        public Events()
+        {
+            this.Items = new HashSet<EventsContents>();
+        }
         public DateTime? Created { get; set; }
 
-     
+        [Key]
         public string EventId { get; set; }
         public int Year { get; set; }
 

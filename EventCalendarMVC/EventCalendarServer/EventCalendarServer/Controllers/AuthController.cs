@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using EventCalendarServer.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EventCalendarServer.Controllers
 {
@@ -47,6 +48,7 @@ namespace EventCalendarServer.Controllers
 
             SigningCredentials signingCreds = new(IssuerSigningKey, SecurityAlgorithms.HmacSha256);
 
+            
             JwtSecurityToken tokenOptions = new JwtSecurityToken(
                 issuer: "https://localhost:44382/",
                 audience: "https://localhost:44200/",
@@ -55,6 +57,7 @@ namespace EventCalendarServer.Controllers
                 signingCredentials: signingCreds
             );
 
+            
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             return Ok(new { Token = tokenString });
 
@@ -79,21 +82,53 @@ namespace EventCalendarServer.Controllers
             return Ok(result);
         }
 
+        [Authorize]
         [HttpPost]
         [Route("Logout")]
 
-        public async Task<IActionResult> Logout(string UserName, string Password)
+        public async Task<IActionResult> Logout(string UserName)
         {
-            
-            ApplicationUser user = new()
+            ApplicationUser user = await _userManager.FindByNameAsync(UserName);
+
+            if (user is null)
             {
-                UserName = UserName,
-                Email = $"{UserName}@gmail.com",
-                EmailConfirmed = true
-            };
-            var result = await _userManager.CreateAsync(user, Password);
-            return Ok(result);
+                return NotFound();
+            }
+
+
+            SymmetricSecurityKey IssuerSigningKey =
+                new(Encoding.UTF8.GetBytes("CSUN590@8:59PM#cretKey"));
+
+            SigningCredentials signingCreds = new(IssuerSigningKey, SecurityAlgorithms.HmacSha256);
+
+
+            JwtSecurityToken tokenOptions = new JwtSecurityToken(
+                issuer: "https://localhost:44382/",
+                audience: "https://localhost:44200/",
+                claims: new List<Claim>(),
+                expires: DateTime.Now,
+                signingCredentials: signingCreds
+            );
+
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            return Ok(new { Token = tokenString });
+
         }
+
+        [Authorize]
+        [HttpPost]
+        [Route("CheckLoginState")]
+
+        public async Task<IActionResult> LoginState()
+        {
+
+
+
+            return Ok("success");
+
+        }
+
 
 
     }

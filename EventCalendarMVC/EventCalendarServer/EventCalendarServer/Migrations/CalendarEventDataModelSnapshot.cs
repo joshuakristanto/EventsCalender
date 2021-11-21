@@ -18,14 +18,14 @@ namespace EventCalendarServer.Migrations
 
             modelBuilder.Entity("EventCalendarServer.Models.Events", b =>
                 {
+                    b.Property<string>("EventId")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime?>("Created")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Day")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("EventId")
-                        .HasColumnType("TEXT");
 
                     b.Property<int>("Month")
                         .HasColumnType("INTEGER");
@@ -33,7 +33,7 @@ namespace EventCalendarServer.Migrations
                     b.Property<int>("Year")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Created");
+                    b.HasKey("EventId");
 
                     b.ToTable("Events");
                 });
@@ -49,7 +49,7 @@ namespace EventCalendarServer.Migrations
                     b.Property<string>("EventId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("EventsCreated")
+                    b.Property<string>("EventsEventId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
@@ -57,7 +57,7 @@ namespace EventCalendarServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventsCreated");
+                    b.HasIndex("EventsEventId");
 
                     b.ToTable("EventsContents");
                 });
@@ -66,7 +66,7 @@ namespace EventCalendarServer.Migrations
                 {
                     b.HasOne("EventCalendarServer.Models.Events", "Events")
                         .WithMany("Items")
-                        .HasForeignKey("EventsCreated");
+                        .HasForeignKey("EventsEventId");
 
                     b.Navigation("Events");
                 });

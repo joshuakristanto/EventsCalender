@@ -17,6 +17,7 @@ export class ViewEventComponent implements OnInit {
   @Input() my_modal_content: any;
   @Input() my_modal_comment: any;
   @Input() date: any;
+  @Input()array: Array<any> =[];
   @Output() update = new EventEmitter<any>();
   modalOptions:NgbModalOptions;
 
@@ -62,6 +63,11 @@ console.log(result[0]['title']);
 // console.log(result[0]['eventContents']['comment']);
     this.my_modal_content = result[0]['title'];
     this.my_modal_comment = result[0]['comment']
+    //  this.array= [{'title':result[0]['title'], 'comment': result[0]['comment'] }]; 
+    for (var item in result){
+      this.array.push(result[item]);
+    } 
+
    }, error => console.error(error));
 
 
@@ -107,8 +113,12 @@ console.log(result.toString())
 // var output = JSON.parse(result);
 console.log(result[0]['title']);
 // console.log(result[0]['eventContents']['comment']);
-    this.my_modal_content = result[0]['title'];
-    this.my_modal_comment = result[0]['comment']
+this.my_modal_content = result[0]['title'];
+this.my_modal_comment = result[0]['comment']
+//  this.array= [{'title':result[0]['title'], 'comment': result[0]['comment'] }]; 
+for (var item in result){
+  this.array.push(result[item]);
+} 
    }, error => console.error(error));
 
   }
