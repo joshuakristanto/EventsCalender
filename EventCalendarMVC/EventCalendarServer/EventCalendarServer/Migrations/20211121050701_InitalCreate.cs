@@ -28,7 +28,6 @@ namespace EventCalendarServer.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     EventId = table.Column<string>(type: "TEXT", nullable: true),
-                    EventsEventId = table.Column<string>(type: "TEXT", nullable: true),
                     Title = table.Column<string>(type: "TEXT", nullable: true),
                     Comment = table.Column<string>(type: "TEXT", nullable: true)
                 },
@@ -36,17 +35,17 @@ namespace EventCalendarServer.Migrations
                 {
                     table.PrimaryKey("PK_EventsContents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EventsContents_Events_EventsEventId",
-                        column: x => x.EventsEventId,
+                        name: "FK_EventsContents_Events_EventId",
+                        column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "EventId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventsContents_EventsEventId",
+                name: "IX_EventsContents_EventId",
                 table: "EventsContents",
-                column: "EventsEventId");
+                column: "EventId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

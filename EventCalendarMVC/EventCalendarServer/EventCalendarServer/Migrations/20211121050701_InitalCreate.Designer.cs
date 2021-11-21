@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventCalendarServer.Migrations
 {
     [DbContext(typeof(CalendarEventData))]
-    [Migration("20211121023425_InitalCreate")]
+    [Migration("20211121050701_InitalCreate")]
     partial class InitalCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,15 +51,12 @@ namespace EventCalendarServer.Migrations
                     b.Property<string>("EventId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("EventsEventId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventsEventId");
+                    b.HasIndex("EventId");
 
                     b.ToTable("EventsContents");
                 });
@@ -68,7 +65,7 @@ namespace EventCalendarServer.Migrations
                 {
                     b.HasOne("EventCalendarServer.Models.Events", "Events")
                         .WithMany("Items")
-                        .HasForeignKey("EventsEventId");
+                        .HasForeignKey("EventId");
 
                     b.Navigation("Events");
                 });
