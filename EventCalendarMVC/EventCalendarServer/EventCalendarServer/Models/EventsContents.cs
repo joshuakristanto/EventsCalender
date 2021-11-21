@@ -25,7 +25,7 @@ namespace EventCalendarServer.Models
         [ForeignKey ("EventId")]
         public string? EventId { get; set; }
 
-        public Events Events { get; set; }
+        public virtual Events Events { get; set; }
         public string Title { get; set; }
 
         public string Comment { get; set; }
