@@ -37,9 +37,14 @@
               >Fetch data</a
             >
           </li>
+          <!-- <li class="nav-item" [routerLinkActive]="['link-active']">
+            <button class="nav-link text-dark" [routerLink]="['/login']"
+              >{{login}}</button
+            >
+          </li> -->
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/login']"
-              >Login</a
+            <button class="nav-link text-dark" (click)="buttonTask()"
+              >{{login}}</button
             >
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">

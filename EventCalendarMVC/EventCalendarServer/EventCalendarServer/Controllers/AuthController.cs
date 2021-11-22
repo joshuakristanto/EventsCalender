@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+//using Microsoft.IdentityModel.Tokens.Jwt;
 using EventCalendarServer.Identity;
 using Microsoft.AspNetCore.Authorization;
 
@@ -53,7 +54,7 @@ namespace EventCalendarServer.Controllers
                 issuer: "https://localhost:44382/",
                 audience: "https://localhost:44200/",
                 claims: new List<Claim>(),
-                expires: DateTime.Now.AddMinutes(5),
+                expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: signingCreds
             );
 
@@ -106,7 +107,8 @@ namespace EventCalendarServer.Controllers
                 issuer: "https://localhost:44382/",
                 audience: "https://localhost:44200/",
                 claims: new List<Claim>(),
-                expires: DateTime.Now,
+                expires: DateTime.Now.AddMinutes(0),
+
                 signingCredentials: signingCreds
             );
 
@@ -125,7 +127,7 @@ namespace EventCalendarServer.Controllers
 
 
 
-            return Ok("success");
+            return Ok();
 
         }
 

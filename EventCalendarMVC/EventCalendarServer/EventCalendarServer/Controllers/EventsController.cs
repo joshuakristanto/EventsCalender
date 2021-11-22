@@ -236,5 +236,19 @@ namespace EventCalendarServer.Controllers
 
             return null;
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("CheckLoginState")]
+
+        public async Task<IActionResult> LoginState()
+        {
+
+
+
+            return Ok();
+
+        }
+
     }
 }

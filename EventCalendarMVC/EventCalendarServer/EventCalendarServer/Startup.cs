@@ -63,7 +63,8 @@ namespace EventCalendarServer
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-
+                        RequireExpirationTime = true,
+                        LifetimeValidator = LifetimeValidator,
                         ValidIssuer = "https://localhost:44382/",
                         ValidAudience = "https://localhost:44200/",
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("CSUN590@8:59PM#cretKey"))
@@ -98,6 +99,15 @@ namespace EventCalendarServer
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private bool LifetimeValidator(DateTime? notBefore, DateTime? expires, SecurityToken token, TokenValidationParameters @params)
+        {
+            if (expires != null)
+            {
+                return expires > DateTime.UtcNow;
+            }
+            return false;
         }
     }
 }

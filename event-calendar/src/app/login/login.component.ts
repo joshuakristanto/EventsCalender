@@ -37,7 +37,7 @@ this.http.post<any>("https://localhost:44382/api/Auth/Login", body,({headers: he
 const token = (<any> result).auth_token;
 console.log("jwt token: " + result.token);
 localStorage.setItem('jwt', result.token);
-
+localStorage.setItem('username', form.value['username']);
 this.invalidLogin = false;
 this.router.navigate([`../`], { relativeTo: this.route });
 // var output = JSON.parse(result);
