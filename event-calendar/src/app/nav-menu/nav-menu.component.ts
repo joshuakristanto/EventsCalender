@@ -32,6 +32,7 @@ export class NavMenuComponent {
     if (error['status'] === 401){
       console.log("Please Login");
       this.login ="Login";
+      alert("Not currently Login. Please Login or create account to have full access.");
      // this.router.navigate([`../login`], { relativeTo: this.route });
     }
   }
