@@ -20,9 +20,10 @@ namespace EventCalendarServer.Models
         public DbSet<Events> Events { get; set; }
         public DbSet<EventsContents> EventsContents { get; set; }
 
-           protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public CalendarEventData(DbContextOptions<CalendarEventData> options) : base(options) { }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
            {
-              optionsBuilder.UseSqlite("Data Source=database.db");
+           //   optionsBuilder.UseSqlite("Data Source=database.db");
            // optionsBuilder.UseLazyLoadingProxies().UseSqlite("Data Source=database.db");
 
         }

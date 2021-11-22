@@ -44,9 +44,9 @@ namespace EventCalendarServer
                 p.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(_ => true)));
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite("Data Source=databaseIdentity.db"));
+                options.UseSqlite(Configuration["ConnectionStrings:IdentityDatabase"]));
 
-          
+            services.AddDbContext<CalendarEventData>(options => options.UseSqlite(Configuration["ConnectionStrings:EventDatabase"]));
 
             services.AddIdentityCore<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();

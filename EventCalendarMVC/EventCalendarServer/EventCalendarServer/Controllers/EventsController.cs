@@ -21,12 +21,14 @@ namespace EventCalendarServer.Controllers
     public class EventsController : ControllerBase
     {
 
+        private CalendarEventData _eventData;
 
         private readonly ILogger<EventsController> _logger;
 
-        public EventsController(ILogger<EventsController> logger)
+        public EventsController(ILogger<EventsController> logger, CalendarEventData eventData)
         {
             _logger = logger;
+            _eventData = eventData;
         }
 
         //[Authorize]
@@ -34,7 +36,7 @@ namespace EventCalendarServer.Controllers
         [HttpGet]
         public IEnumerable GetMonthEvents( int month, int year)
         {
-            using (var db = new CalendarEventData())
+            using (var db = _eventData)
             {
                 var localEvent = db.Events;
                 var localEventContent = db.EventsContents;
@@ -65,7 +67,7 @@ namespace EventCalendarServer.Controllers
         [HttpGet]
         public IEnumerable GetMonthEventContents(int month, int year)
         {
-            using (var db = new CalendarEventData())
+            using (var db = _eventData)
             {
                 var localEvent = db.Events;
                 var localEventContent = db.EventsContents;
@@ -94,7 +96,7 @@ namespace EventCalendarServer.Controllers
         [HttpGet]
         public IEnumerable GetMonthDayEvents( DateTime date)
         {
-            var db = new CalendarEventData();
+            var db = _eventData;
 
 
             var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).SelectMany(c => c.Items, (c,i) => new { c.Created, i.Title, i.Comment, i.Id }); 
@@ -106,7 +108,7 @@ namespace EventCalendarServer.Controllers
         [HttpGet]
         public IEnumerable Test(DateTime date)
         {
-            var db = new CalendarEventData();
+            var db = _eventData;
                 
            var results = db.EventsContents.Where(c => c.Events.Created == date);
            
@@ -120,7 +122,7 @@ namespace EventCalendarServer.Controllers
         [HttpPost]
         public IAsyncDisposable AddEvent(DateTime date, string title, string comment)
         {
-            using (var db = new CalendarEventData())
+            using (var db = _eventData)
             {
                 var ticks = new DateTime(2016, 1, 1).Ticks;
                 var ans = DateTime.Now.Ticks - ticks;
@@ -200,7 +202,7 @@ namespace EventCalendarServer.Controllers
         [HttpPost]
         public IAsyncDisposable DeleteEvent(DateTime date)
         {
-            using (var db = new CalendarEventData())
+            using (var db = _eventData)
             {
 
                 var results = db.Events.Where(p =>
@@ -243,7 +245,7 @@ namespace EventCalendarServer.Controllers
         [HttpPost]
         public IAsyncDisposable DeleteEventItem(DateTime date, string id)
         {
-            using (var db = new CalendarEventData())
+            using (var db = _eventData)
             {
 
                 var results = db.Events.Where(p =>

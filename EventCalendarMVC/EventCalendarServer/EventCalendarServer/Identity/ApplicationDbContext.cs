@@ -20,7 +20,7 @@ namespace EventCalendarServer.Identity
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=databaseIdentity.db");
+        //    optionsBuilder.UseSqlite("Data Source=databaseIdentity.db");
 
         }
     }
