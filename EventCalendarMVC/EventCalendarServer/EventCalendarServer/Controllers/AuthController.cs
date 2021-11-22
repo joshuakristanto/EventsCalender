@@ -19,10 +19,11 @@ namespace EventCalendarServer.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
-
+       // private readonly SignInManager<IdentityUser> _signInManager;
         public AuthController(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
+         //   _signInManager = signInManager;
         }
 
         [HttpPost]
@@ -38,12 +39,15 @@ namespace EventCalendarServer.Controllers
 
             var result = await _userManager.CheckPasswordAsync(user, Password);
 
+            
 
 
             if (!result)
             {
                 return Ok(new { result = false });
             }
+
+          //  var resultTrue = await _signInManager.PasswordSignInAsync(UserName, Password, false, false);
             SymmetricSecurityKey IssuerSigningKey =
                     new(Encoding.UTF8.GetBytes("CSUN590@8:59PM#cretKey"));
 
@@ -58,6 +62,8 @@ namespace EventCalendarServer.Controllers
                 signingCredentials: signingCreds
             );
 
+
+         
             
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             return Ok(new { Token = tokenString });
@@ -96,7 +102,7 @@ namespace EventCalendarServer.Controllers
                 return NotFound();
             }
 
-
+         //  await _signInManager.SignOutAsync();
             SymmetricSecurityKey IssuerSigningKey =
                 new(Encoding.UTF8.GetBytes("CSUN590@8:59PM#cretKey"));
 
@@ -112,6 +118,8 @@ namespace EventCalendarServer.Controllers
                 signingCredentials: signingCreds
             );
 
+           
+          
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             return Ok(new { Token = tokenString });

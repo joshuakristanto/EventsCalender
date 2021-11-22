@@ -97,7 +97,7 @@ namespace EventCalendarServer.Controllers
             var db = new CalendarEventData();
 
 
-            var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).SelectMany(c => c.Items, (c,i) => new { c.Created, i.Title, i.Comment }); 
+            var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).SelectMany(c => c.Items, (c,i) => new { c.Created, i.Title, i.Comment, i.Id }); 
 
             return results;
         }
@@ -236,6 +236,58 @@ namespace EventCalendarServer.Controllers
 
             return null;
         }
+
+
+        // [Authorize]
+        [Route("DeleteItem")]
+        [HttpPost]
+        public IAsyncDisposable DeleteEventItem(DateTime date, string id)
+        {
+            using (var db = new CalendarEventData())
+            {
+
+                var results = db.Events.Where(p =>
+                    p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
+                    p.Created.Value.Date.Year == date.Year).ToArray();
+                var resultsEventContents = db.Events.Where(p =>
+                    p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
+                    p.Created.Value.Date.Year == date.Year).Select(c => c.Items).ToArray();
+                /*
+                var resultsEventContent = db.EventsContents.Where(p =>
+                    p.CommentCreated.Value.Date.Day == date.Day && p.CommentCreated.Value.Date.Month == date.Month &&
+                    p.CommentCreated.Value.Date.Year == date.Year).ToArray();
+                */
+                //var eventContents = resultsEventContent[0];
+                var events = results[0];
+                //  db.EventsContents.Remove(eventContents);
+
+                foreach (var item in resultsEventContents[0])
+                {
+                    if (item.Id == id)
+                    {
+                        db.EventsContents.Remove(item);
+                        resultsEventContents[0].Remove(item);
+                    }
+                   // db.EventsContents.Remove(item);
+                }
+
+                events.Items = resultsEventContents[0];
+                db.Events.Update(events);
+                //db.Events.Remove(events);
+                
+                db.SaveChangesAsync();
+
+
+            };
+
+
+
+            // var db = new CalendarEventData();
+
+
+            return null;
+        }
+
 
         [Authorize]
         [HttpGet]

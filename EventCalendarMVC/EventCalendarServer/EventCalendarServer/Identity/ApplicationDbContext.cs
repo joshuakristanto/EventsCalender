@@ -13,6 +13,8 @@ namespace EventCalendarServer.Identity
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+      
+
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
