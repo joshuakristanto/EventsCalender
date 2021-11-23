@@ -101,7 +101,7 @@ namespace EventCalendarServer.Controllers
 
 
             // var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).SelectMany(c => c.Items, (c,i) => new { c.Created, i.Title, i.Comment, i.Id });
-            var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).Select(c => new { c.Created, Items = c.Items.Select(c => new { c.Title, c.Comment, c.Id }) });
+            var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).Select(c => new { c.Created, items = c.Items.Select(c => new { c.Title, c.Comment, c.Id }) });
             return results;
         }
         // [Authorize]
@@ -121,7 +121,7 @@ namespace EventCalendarServer.Controllers
         //[Authorize]
         [Route("Add")]
         [HttpPost]
-        public IAsyncDisposable AddEvent(DateTime date, string title, string comment)
+        public IActionResult AddEvent(DateTime date, string title, string comment)
         {
             using (var db = _eventData)
             {
@@ -196,7 +196,7 @@ namespace EventCalendarServer.Controllers
 
            // var db = new CalendarEventData();
 
-           return null;
+           return Ok();
         }
        // [Authorize]
         [Route("Delete")]
@@ -269,13 +269,13 @@ namespace EventCalendarServer.Controllers
                     if (item.Id == id)
                     {
                         db.EventsContents.Remove(item);
-                        resultsEventContents[0].Remove(item);
+                      //  resultsEventContents[0].Remove(item);
                     }
                    // db.EventsContents.Remove(item);
                 }
 
                 events.Items = resultsEventContents[0];
-                db.Events.Update(events);
+               // db.Events.Update(events);
                 //db.Events.Remove(events);
                 
                 db.SaveChangesAsync();

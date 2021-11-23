@@ -59,13 +59,13 @@ this.http.get<any>("https://localhost:44382/Events/Day", ({headers: header, para
 
 console.log(result.toString())
 // var output = JSON.parse(result);
-console.log(result[0]['title']);
+console.log(result[0]['items']);
 // console.log(result[0]['eventContents']['comment']);
-    this.my_modal_content = result[0]['title'];
-    this.my_modal_comment = result[0]['comment']
+    this.my_modal_content = result[0]['items']['title'];
+    this.my_modal_comment = result[0]['items']['comment'];
     //  this.array= [{'title':result[0]['title'], 'comment': result[0]['comment'] }]; 
-    for (var item in result){
-      this.array.push(result[item]);
+    for (var item in result['items']){
+      this.array.push(result['item'][item]);
     } 
 
    }, error => console.error(error));
