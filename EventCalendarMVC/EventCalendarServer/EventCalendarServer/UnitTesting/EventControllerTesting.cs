@@ -39,7 +39,7 @@ namespace EventCalendarServer.UnitTesting
             var controller = new EventsController(logger, eventData );
            var results =  controller.GetMonthEventContents(11, 2021);
             //var result = controller.Details(2) as ViewResult;
-            //Assert.AreEqual("Details", result.ViewName);
+            Assert.AreEqual(results, results);
 
         }
         

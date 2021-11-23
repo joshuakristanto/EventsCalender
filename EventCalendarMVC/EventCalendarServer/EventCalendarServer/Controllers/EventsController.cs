@@ -42,9 +42,10 @@ namespace EventCalendarServer.Controllers
                 var localEventContent = db.EventsContents;
                 //Switch Include to Select. 
 
-                //  var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Include(c=>c.EventsContents).ToList();
+                // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Include(c=>c.EventsContents).ToList();
                   var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c,i) => new { c.Created,i.Title } ).ToList();
-              // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).ToList();
+              //  var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Select(c => new { c.Created, EventContents =  c.Items.Select(k => k.Title)}).ToList();
+                // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).ToList();
                 foreach (var events in localEventComplete)
                 {
                     Console.WriteLine("Order: order.Created");
@@ -99,8 +100,8 @@ namespace EventCalendarServer.Controllers
             var db = _eventData;
 
 
-            var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).SelectMany(c => c.Items, (c,i) => new { c.Created, i.Title, i.Comment, i.Id }); 
-
+            // var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).SelectMany(c => c.Items, (c,i) => new { c.Created, i.Title, i.Comment, i.Id });
+            var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).Select(c => new { c.Created, Items = c.Items.Select(c => new { c.Title, c.Comment, c.Id }) });
             return results;
         }
         // [Authorize]
@@ -200,7 +201,7 @@ namespace EventCalendarServer.Controllers
        // [Authorize]
         [Route("Delete")]
         [HttpPost]
-        public IAsyncDisposable DeleteEvent(DateTime date)
+        public IActionResult DeleteEvent(DateTime date)
         {
             using (var db = _eventData)
             {
@@ -236,14 +237,14 @@ namespace EventCalendarServer.Controllers
             // var db = new CalendarEventData();
 
 
-            return null;
+            return Ok();
         }
 
 
         // [Authorize]
         [Route("DeleteItem")]
         [HttpPost]
-        public IAsyncDisposable DeleteEventItem(DateTime date, string id)
+        public async Task<IActionResult> DeleteEventItem(DateTime date, string id)
         {
             using (var db = _eventData)
             {
@@ -287,7 +288,7 @@ namespace EventCalendarServer.Controllers
             // var db = new CalendarEventData();
 
 
-            return null;
+            return Ok();
         }
 
 
