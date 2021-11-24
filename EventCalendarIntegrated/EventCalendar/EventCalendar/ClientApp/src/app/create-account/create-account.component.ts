@@ -33,7 +33,7 @@ const header = new HttpHeaders()
     'application/json'
   );
 
-    this.http.post<any>(location.origin+"api/Auth/Create", body,({headers: header, params:param}) ).subscribe(result => {
+    this.http.post<any>(location.origin+"/api/Auth/Create", body,({headers: header, params:param}) ).subscribe(result => {
 
 // const token = (<any> result).auth_token;
 // console.log("jwt token: " + result.token);

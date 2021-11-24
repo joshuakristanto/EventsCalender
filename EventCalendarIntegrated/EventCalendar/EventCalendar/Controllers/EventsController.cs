@@ -188,8 +188,8 @@ namespace EventCalendar.Controllers
                
               
               //  db.Events.AddAsync(events);
-                db.SaveChangesAsync();
-                
+              db.SaveChanges();
+
 
             };
             
@@ -227,7 +227,7 @@ namespace EventCalendar.Controllers
                 }
 
                 db.Events.Remove(events);
-                db.SaveChangesAsync();
+                db.SaveChanges();
 
 
             };
@@ -278,7 +278,7 @@ namespace EventCalendar.Controllers
                // db.Events.Update(events);
                 //db.Events.Remove(events);
                 
-                db.SaveChangesAsync();
+                db.SaveChanges();
 
 
             };

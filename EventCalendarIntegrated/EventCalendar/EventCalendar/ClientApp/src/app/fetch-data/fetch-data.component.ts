@@ -23,7 +23,7 @@ const header = new HttpHeaders()
 )
 .append ('Authorization', `Bearer ${token}`);
 
-    http.get<WeatherForecast[]>(location.origin+"WeatherForecast", { headers:{
+    http.get<WeatherForecast[]>(location.origin+"/WeatherForecast", { headers:{
       'Authorization' : `Bearer ${token}`
     }
   }).subscribe(result => {

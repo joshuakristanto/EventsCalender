@@ -11,6 +11,7 @@
 
     <!-- Set this to true if you enable server-side prerendering -->
     <BuildServerSideRenderer>false</BuildServerSideRenderer>
+    <UserSecretsId>16eaf200-e23e-4f17-b038-942a30e497de</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -52,19 +53,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Content Update="wwwroot\database.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\databaseIdentity.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  
-  <ItemGroup>
     <None Update="database.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="databaseIdentity.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
