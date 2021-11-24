@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 export class FetchDataComponent {
   public forecasts: WeatherForecast[] = [];
 
-  constructor(http: HttpClient,) {
+  constructor(http: HttpClient) {
 
     // const param = new HttpParams()
     // .append('date', date.toISOString());
@@ -23,7 +23,7 @@ const header = new HttpHeaders()
 )
 .append ('Authorization', `Bearer ${token}`);
 
-    http.get<WeatherForecast[]>("http://localhost:54551/WeatherForecast", { headers:{
+    http.get<WeatherForecast[]>(location.origin+"WeatherForecast", { headers:{
       'Authorization' : `Bearer ${token}`
     }
   }).subscribe(result => {

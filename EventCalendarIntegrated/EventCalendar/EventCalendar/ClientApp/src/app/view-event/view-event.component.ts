@@ -1,4 +1,4 @@
-import { Component, Input, NgModuleRef, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, NgModuleRef, OnInit, Output, EventEmitter, Inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { startOfDay } from 'date-fns';
 import { CalendarView, CalendarEvent } from 'angular-calendar';
@@ -55,7 +55,7 @@ export class ViewEventComponent implements OnInit {
       )
       .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
 
-    this.http.get<any>("https://localhost:44382/Events/Day", ({ headers: header, params: param })).subscribe(result => {
+    this.http.get<any>(location.origin+"/Events/Day", ({ headers: header, params: param })).subscribe(result => {
 
       console.log("Day", result.toString())
       // var output = JSON.parse(result);
@@ -106,7 +106,7 @@ export class ViewEventComponent implements OnInit {
         'application/json'
       )
       .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
-    this.http.get<any>("https://localhost:44382/Events/Day", ({ headers: header, params: param })).subscribe(result => {
+    this.http.get<any>(location.origin+"/Events/Day", ({ headers: header, params: param })).subscribe(result => {
 
       console.log("Day", result.toString())
       // var output = JSON.parse(result);
@@ -145,7 +145,7 @@ export class ViewEventComponent implements OnInit {
         'application/json'
       )
       .append('Authorization', `Bearer ${token}`);
-    this.http.post<Event>("https://localhost:44382/Events/Delete", body, ({ headers: header, params: param })).subscribe(result => {
+    this.http.post<Event>(location.origin+"/Events/Delete", body, ({ headers: header, params: param })).subscribe(result => {
       this.updateEvent();
       this.update.emit({ update: "Update" });
 

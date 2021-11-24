@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {NgForm} from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   invalidLogin: boolean = false;
-  constructor(private http: HttpClient , private router: Router, private route: ActivatedRoute) { }
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
   }
@@ -32,7 +32,7 @@ const header = new HttpHeaders()
     'application/json'
   );
 
-this.http.post<any>("https://localhost:44382/api/Auth/Login", body,({headers: header, params:param}) ).subscribe(result => {
+    this.http.post<any>(location.origin+"/api/Auth/Login", body,({headers: header, params:param}) ).subscribe(result => {
 
 const token = (<any> result).auth_token;
 console.log("jwt token: " + result.token);

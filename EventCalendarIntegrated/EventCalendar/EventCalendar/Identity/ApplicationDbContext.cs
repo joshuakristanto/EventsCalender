@@ -7,20 +7,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using EventCalendarServer.Identity;
+using EventCalendar.Identity;
 
-namespace EventCalendarServer.Identity
+namespace EventCalendar.Identity
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
       
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions <ApplicationDbContext> options) : base(options)
         {
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-        //    optionsBuilder.UseSqlite("Data Source=databaseIdentity.db");
+        //optionsBuilder.UseSqlite("Data Source=databaseIdentity.db");
 
         }
     }

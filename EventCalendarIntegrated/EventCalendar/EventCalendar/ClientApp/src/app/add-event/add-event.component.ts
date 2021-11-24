@@ -5,6 +5,7 @@ import { NgbActiveModal, NgbDateParserFormatter, NgbModal, NgbModalOptions } fro
 import { FormBuilder } from '@angular/forms';
 import { stringify } from '@angular/compiler/src/util';
 import { ViewEventComponent } from '../view-event/view-event.component';
+import { Inject } from '@angular/core';
 export type Update = { update: string };
 @Component({
   selector: 'app-add-event',
@@ -20,12 +21,13 @@ export class AddEventComponent implements OnInit {
   @Input() my_modal_content: any;
   @Input() date: any;
   @Output() update = new EventEmitter<any>();
-  message: string = "Update"
+  message: string = "Update";
+
   modalOptions:NgbModalOptions;
  
 
 
-  constructor(public activeModal: NgbActiveModal, private http: HttpClient, private modalService :NgbModal) {
+  constructor(public activeModal: NgbActiveModal, private http: HttpClient, private modalService: NgbModal) {
     
     this.modalOptions = {
       backdrop:'static',
@@ -58,7 +60,7 @@ addEvent( date:Date, localTitle: string, localComment: string){
   )
   .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
 
-  this.http.post<Event>("https://localhost:44382/Events/Add", body,({headers: header, params:param}) ).subscribe(result => {
+  this.http.post<Event>(location.origin+"/Events/Add", body,({headers: header, params:param}) ).subscribe(result => {
     this.update.emit({update: "Update"});
      }, error => console.error(error));
 
@@ -101,7 +103,7 @@ const header = new HttpHeaders()
 
 
 
-this.http.get<any>("https://localhost:44382/Events/Day", ({headers: header, params:param}) ).subscribe(result => {
+  this.http.get<any>(location.origin+"/Events/Day", ({headers: header, params:param}) ).subscribe(result => {
 
 console.log(result.toString())
 // var output = JSON.parse(result);

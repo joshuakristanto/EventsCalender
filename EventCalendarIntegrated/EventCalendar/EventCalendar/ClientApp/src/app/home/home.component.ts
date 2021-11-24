@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { startOfDay } from 'date-fns';
 import { Observable, Subject } from 'rxjs';
 
@@ -16,6 +16,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 })
 
 export class HomeComponent {
+  
   title = 'event-calendar';
   viewDate: Date = new Date();
   currentMonth : number = new Date().getMonth();
@@ -37,7 +38,7 @@ export class HomeComponent {
   modalOptions: NgbModalOptions;
 
   constructor(
-    private modalService: NgbModal,private http: HttpClient, 
+    private modalService: NgbModal, private http: HttpClient
   ) {
     this.modalOptions = {
       backdrop: 'static',
@@ -72,7 +73,7 @@ export class HomeComponent {
   )
   .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
 
-  this.http.get<any>("https://localhost:44382/Events/Month", ({ headers: header, params: param })).subscribe(result => {
+    this.http.get<any>(location.origin+"/Events/Month", ({ headers: header, params: param })).subscribe(result => {
 
     console.log(result.toString())
     // var output = JSON.parse(result);
@@ -82,8 +83,8 @@ export class HomeComponent {
       // block of statements 
       console.log("Home Results" , result[item]['created']);
       var localDate = new Date(result[item]['created']);
-      
-      this.events.push({start:  startOfDay(localDate) , title: result[item]['title']})
+
+      this.events.push({ start: startOfDay(localDate), title: result[item]['title'] });
       console.log(this.events);
   }
   this.refresh.next();

@@ -1,6 +1,6 @@
 using System;
 
-namespace EventCalendar
+namespace EventCalendar.Models
 {
     public class WeatherForecast
     {

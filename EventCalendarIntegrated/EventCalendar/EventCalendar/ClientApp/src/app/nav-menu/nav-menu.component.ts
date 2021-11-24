@@ -1,4 +1,4 @@
-import { Component, Input, NgModuleRef, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, NgModuleRef, OnInit, Output, EventEmitter, Inject } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { startOfDay } from 'date-fns';
 import { CalendarView, CalendarEvent } from 'angular-calendar';
@@ -15,7 +15,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class NavMenuComponent {
   isExpanded = false;
   @Input() login: string = "Login";
-  constructor( private http: HttpClient,private router: Router, private route: ActivatedRoute) {
+
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {
 
     this.checkLoginState();
 
@@ -59,7 +60,7 @@ export class NavMenuComponent {
       )
       .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
 
-    this.http.post<any>("https://localhost:44382/api/Auth/Logout", body, ({ headers: header, params: param })).subscribe(result => {
+    this.http.post<any>(location.origin+"/api/Auth/Logout", body, ({ headers: header, params: param })).subscribe(result => {
 
       const token = (<any>result).auth_token;
       console.log("jwt token2: " + result.token);
@@ -100,14 +101,14 @@ export class NavMenuComponent {
         'application/json'
       )
       .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
-    this.http.get<any>("https://localhost:44382/Events/CheckLoginState", ({ headers: header, params: param })).subscribe(result => {
+    this.http.get<any>(location.origin+"/Events/CheckLoginState", ({ headers: header, params: param })).subscribe(result => {
 
        
       this.login ="Sign-Out";
         
     }, error => 
     
-    this.errorResponse(error), );
+    this.errorResponse(error) );
     
 
 
