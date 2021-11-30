@@ -53,10 +53,11 @@ namespace EventCalendar
 
                 p.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(_ => true)));
 
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:IdentityDatabase"]));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration["ConnectionStrings:IdentityDatabase"]));
 
-            services.AddDbContext<CalendarEventData>(options => options.UseSqlServer(Configuration["ConnectionStrings:EventDatabase"]));
-
+            services.AddDbContext<CalendarEventData>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration["ConnectionStrings:EventDatabase"]));
+            services.AddControllers().AddNewtonsoftJson(x =>
+                x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddIdentityCore<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddAuthentication(opt =>
