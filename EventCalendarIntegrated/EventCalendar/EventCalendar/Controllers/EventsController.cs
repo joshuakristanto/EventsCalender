@@ -314,7 +314,7 @@ namespace EventCalendar.Controllers
 
                     if (item.Id == id)
                     {
-                        var eventContents = db.EventsContents.Find(item);
+                        var eventContents = db.EventsContents.Find(item.Id);
                         eventContents.Comment = comment;
                         eventContents.Title = title;
                     }

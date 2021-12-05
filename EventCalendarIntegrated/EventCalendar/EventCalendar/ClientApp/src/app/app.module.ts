@@ -16,7 +16,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { LoginComponent } from './login/login.component';
 import { AddEventComponent } from './add-event/add-event.component';
 import { ViewEventComponent } from './view-event/view-event.component';
-
+import { EditEventComponent } from './edit-event/edit-event.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatNativeDateModule} from '@angular/material/core';
@@ -35,6 +35,7 @@ import { CreateAccountComponent } from './create-account/create-account.componen
     AddEventComponent,
     ViewEventComponent,
     CreateAccountComponent,
+    EditEventComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,7 +60,7 @@ import { CreateAccountComponent } from './create-account/create-account.componen
     BrowserAnimationsModule
   ],
   entryComponents: [ ViewEventComponent,  LoginComponent,
-    AddEventComponent, CreateAccountComponent],
+    AddEventComponent, CreateAccountComponent, EditEventComponent],
   providers: [],
   bootstrap: [AppComponent]
 })
