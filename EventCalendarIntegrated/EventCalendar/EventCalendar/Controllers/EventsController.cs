@@ -291,7 +291,50 @@ namespace EventCalendar.Controllers
             return Ok();
         }
 
+        [Route("EditItem")]
+        [HttpPost]
+        public async Task<IActionResult> EditEventItem(DateTime date, string id, string title, string comment)
+        {
+            using (var db = _eventData)
+            {
 
+                var results = db.Events.Where(p =>
+                    p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
+                    p.Created.Value.Date.Year == date.Year).ToArray();
+                var resultsEventContents = db.Events.Where(p =>
+                    p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
+                    p.Created.Value.Date.Year == date.Year).Select(c => c.Items).ToArray();
+              
+                var events = results[0];
+
+                
+
+                foreach (var item in resultsEventContents[0])
+                {
+
+                    if (item.Id == id)
+                    {
+                        var eventContents = db.EventsContents.Find(item);
+                        eventContents.Comment = comment;
+                        eventContents.Title = title;
+                    }
+                }
+
+                events.Items = resultsEventContents[0];
+              
+
+                db.SaveChanges();
+
+
+            };
+
+
+
+            // var db = new CalendarEventData();
+
+
+            return Ok();
+        }
         [Authorize]
         [HttpGet]
         [Route("CheckLoginState")]
