@@ -21,8 +21,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using EventCalendar.Identity;
+using EventCalendar.Interfaces;
 using EventCalendar.Models;
-
+using EventCalendar.Classes;
 
 namespace EventCalendar
 {
@@ -60,6 +61,7 @@ namespace EventCalendar
                 x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddIdentityCore<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddScoped<ICalendarEvent, CalenderEventClass>();
             services.AddAuthentication(opt =>
                 {
                     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -75,8 +77,8 @@ namespace EventCalendar
                         ValidateIssuerSigningKey = true,
                         RequireExpirationTime = true,
                         LifetimeValidator = LifetimeValidator,
-                        ValidIssuer = "https://localhost:44382/",
-                        ValidAudience = "https://localhost:44200/",
+                        ValidIssuer = "https://eventcalendar-2.azurewebsites.net",
+                        ValidAudience = "https://eventcalendar-2.azurewebsites.net",
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("CSUN590@8:59PM#cretKey"))
 
                     };

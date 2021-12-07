@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
+using EventCalendar.Classes;
+using EventCalendar.Interfaces;
 using EventCalendar.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -22,21 +24,27 @@ namespace EventCalendar.Controllers
     {
 
         private CalendarEventData _eventData;
-
+        private ICalendarEvent _calendarDb;
+       
         private readonly ILogger<EventsController> _logger;
 
-        public EventsController(ILogger<EventsController> logger, CalendarEventData eventData)
+        public EventsController(ILogger<EventsController> logger, CalendarEventData eventData, ICalendarEvent calendarDb)
         {
             _logger = logger;
             _eventData = eventData;
+            _calendarDb = calendarDb;
         }
+
+    
+
 
         //[Authorize]
         [Route("Month")]
         [HttpGet]
         public IEnumerable GetMonthEvents( int month, int year)
         {
-            using (var db = _eventData)
+           
+            /*using (var db = _eventData)
             {
                 var localEvent = db.Events;
                 var localEventContent = db.EventsContents;
@@ -57,6 +65,9 @@ namespace EventCalendar.Controllers
                 }
 
             }
+            */
+
+            return _calendarDb.GetMonthEvents(month, year);
 
 
 
