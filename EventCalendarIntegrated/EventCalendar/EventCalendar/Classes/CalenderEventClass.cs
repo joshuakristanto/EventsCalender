@@ -201,8 +201,8 @@ namespace EventCalendar.Classes
         public void EditEventItem(DateTime date, string id, string title, string comment)
         {
             var results = db.Events.Where(p =>
-                p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
-                p.Created.Value.Date.Year == date.Year).ToArray();
+                    p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
+                    p.Created.Value.Date.Year == date.Year).ToArray();
             var resultsEventContents = db.Events.Where(p =>
                 p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
                 p.Created.Value.Date.Year == date.Year).Select(c => c.Items).ToArray();
