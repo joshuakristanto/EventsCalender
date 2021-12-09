@@ -55,8 +55,8 @@ namespace EventCalendar.Controllers
 
             
             JwtSecurityToken tokenOptions = new JwtSecurityToken(
-                issuer: "https://localhost:44382/",
-                audience: "https://localhost:44200/",
+                issuer: "https://www.eventcalendar-2.azurewebsites.net",
+                audience: "https://www.eventcalendar-2.azurewebsites.net",
                 claims: new List<Claim>(),
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: signingCreds
@@ -95,14 +95,14 @@ namespace EventCalendar.Controllers
 
         public async Task<IActionResult> Logout(string UserName)
         {
+            /*
             ApplicationUser user = await _userManager.FindByNameAsync(UserName);
 
             if (user is null)
             {
                 return NotFound();
             }
-
-         //  await _signInManager.SignOutAsync();
+            
             SymmetricSecurityKey IssuerSigningKey =
                 new(Encoding.UTF8.GetBytes("CSUN590@8:59PM#cretKey"));
 
@@ -110,8 +110,8 @@ namespace EventCalendar.Controllers
 
 
             JwtSecurityToken tokenOptions = new JwtSecurityToken(
-                issuer: "https://localhost:44382/",
-                audience: "https://localhost:44200/",
+                issuer: "https://www.eventcalendar-2.azurewebsites.net",
+                audience: "https://www.eventcalendar-2.azurewebsites.net",
                 claims: new List<Claim>(),
                 expires: DateTime.Now.AddMinutes(0),
 
@@ -123,6 +123,8 @@ namespace EventCalendar.Controllers
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             return Ok(new { Token = tokenString });
+            */
+            return Ok();
 
         }
 
