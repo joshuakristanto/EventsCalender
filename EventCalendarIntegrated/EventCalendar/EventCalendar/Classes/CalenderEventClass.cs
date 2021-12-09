@@ -74,12 +74,14 @@ namespace EventCalendar.Classes
             var uniqueId = ans.ToString("x");
 
 
+             int dayDate = date.Day;
+             int monthDate = date.Month;
+             int yearDate = date.Year;
 
 
-
-            var day = db.Events;
-            ICollection<EventsContents>[] dbContent = day.Where(c => c.Created == date).Select(c => c.Items).ToArray();
-            Events[] eventLocal = day.Where(c => c.Created == date).ToArray();
+            var eventDb = db.Events;
+            ICollection<EventsContents>[] dbContent = eventDb.Where(c => c.Created == date).Select(c => c.Items).ToArray();
+            Events[] eventLocal = eventDb.Where(c => c.Created == date).ToArray();
 
             if (eventLocal.Length > 0)
             {
@@ -105,9 +107,9 @@ namespace EventCalendar.Classes
                 {
 
                     Created = date,
-                    Year = date.Year,
-                    Month = date.Month,
-                    Day = date.Day,
+                    Year = yearDate,
+                    Month = monthDate,
+                    Day = dayDate,
                     Items = new List<EventsContents>(),
                     EventId = uniqueId,
 
@@ -133,6 +135,27 @@ namespace EventCalendar.Classes
 
             //  db.Events.AddAsync(events);
             db.SaveChanges();
+
+        }
+
+        public void AddEventToday(string title, string comment)
+        {
+            DateTime todayDate = DateTime.Today;
+            AddEvent(todayDate, title, comment);
+
+        }
+
+        public void DeleteToday()
+        {
+            DateTime todayDate = DateTime.Today;
+            DeleteEvent(todayDate);
+
+        }
+
+        public void DeleteTodayEventItem(string id)
+        {
+            DateTime todayDate = DateTime.Today;
+            DeleteEventItem(todayDate, id);
 
         }
 
@@ -227,6 +250,12 @@ namespace EventCalendar.Classes
 
             db.SaveChanges();
 
+        }
+
+        public void EditEventItemToday(string id, string title, string comment)
+        {
+            DateTime todayDate = DateTime.Today;
+            EditEventItem(todayDate, id, title, comment);
         }
     }
 }
