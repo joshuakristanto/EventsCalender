@@ -38,7 +38,7 @@ namespace EventCalendar.Controllers
     
 
 
-        [Authorize]
+       // [Authorize]
         [Route("Month")]
         [HttpGet]
         public IEnumerable GetMonthEvents( int month, int year)
@@ -53,7 +53,7 @@ namespace EventCalendar.Controllers
         }
 
 
-        [Authorize]
+       // [Authorize]
         [Route("MonthComments")]
         [HttpGet]
         public IEnumerable GetMonthEventContents(int month, int year)
@@ -63,14 +63,14 @@ namespace EventCalendar.Controllers
         }
 
 
-        [Authorize]
+      //  [Authorize]
         [Route("Day")]
         [HttpGet]
         public IEnumerable GetMonthDayEvents( DateTime date)
         {
             return _calendarDb.GetMonthDayEvents(date);
         }
-         [Authorize]
+       //  [Authorize]
         [Route("Test")]
         [HttpGet]
         public IEnumerable Test(DateTime date)
@@ -84,7 +84,7 @@ namespace EventCalendar.Controllers
             //   var results2 = db.Events.Single(c => c.Created == date.);
             return results;
         }
-        [Authorize]
+     //   [Authorize]
         [Route("Add")]
         [HttpPost]
         public IActionResult AddEvent(DateTime date, string title, string comment)
@@ -97,7 +97,7 @@ namespace EventCalendar.Controllers
 
            return Ok();
         }
-        [Authorize]
+      //  [Authorize]
         [Route("Delete")]
         [HttpPost]
         public IActionResult DeleteEvent(DateTime date)
@@ -108,7 +108,7 @@ namespace EventCalendar.Controllers
         }
 
 
-         [Authorize]
+      //   [Authorize]
         [Route("DeleteItem")]
         [HttpPost]
         public async Task<IActionResult> DeleteEventItem(DateTime date, string id)
@@ -119,6 +119,7 @@ namespace EventCalendar.Controllers
             return Ok();
         }
 
+        //   [Authorize]
         [Route("EditItem")]
         [HttpPost]
         public async Task<IActionResult> EditEventItem(DateTime date, string id, string title, string comment)

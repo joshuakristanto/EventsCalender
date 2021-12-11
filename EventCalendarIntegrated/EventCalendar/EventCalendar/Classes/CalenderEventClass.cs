@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventCalendar.Interfaces;
 using EventCalendar.Models;
+using EventCalendar.ViewModels;
 
 namespace EventCalendar.Classes
 {
@@ -15,7 +16,7 @@ namespace EventCalendar.Classes
         {
             db = dbContext;
         }
-        public IEnumerable GetMonthEvents(int month, int year)
+        public IEnumerable<GetMonthEventsModel> GetMonthEvents(int month, int year)
         {
             //  throw new NotImplementedException();
             var localEvent = db.Events;
@@ -23,7 +24,7 @@ namespace EventCalendar.Classes
             //Switch Include to Select. 
 
             // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Include(c=>c.EventsContents).ToList();
-            var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => new { c.Created, i.Title }).ToList();
+            List<GetMonthEventsModel> localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => new GetMonthEventsModel {Created = c.Created.Value, Title= i.Title }).ToList();
             //  var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Select(c => new { c.Created, EventContents =  c.Items.Select(k => k.Title)}).ToList();
             // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).ToList();
             foreach (var events in localEventComplete)
@@ -37,15 +38,18 @@ namespace EventCalendar.Classes
             }
         }
 
-        public IEnumerable GetMonthEventContents(int month, int year)
+        public IEnumerable <GetMonthEventContentModel> GetMonthEventContents(int month, int year)
         {
             var localEvent = db.Events;
             var localEventContent = db.EventsContents;
             //Switch Include to Select. 
 
             //  var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Include(c=>c.EventsContents).ToList();
-            var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => new { c.Created, i.Title, i.Comment }).ToList();
+           // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => new { c.Created, i.Title, i.Comment }).ToList();
             // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).ToList();
+
+            List<GetMonthEventContentModel> localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => new GetMonthEventContentModel { Created = c.Created.Value, Title = i.Title, Comment = i.Comment }).ToList();
+
             foreach (var events in localEventComplete)
             {
                 Console.WriteLine("Order: order.Created");
