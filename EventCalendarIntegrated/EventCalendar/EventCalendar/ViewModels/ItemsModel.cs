@@ -7,5 +7,8 @@ namespace EventCalendar.ViewModels
 {
     public class ItemsModel
     {
+        public string Title { get; set; }
+        public string Comment { get; set; }
+        public string Id { get; set; }
     }
 }

@@ -61,13 +61,15 @@ namespace EventCalendar.Classes
             }
         }
 
-        public IEnumerable GetMonthDayEvents(DateTime date)
+        public IEnumerable <GetMonthDayEventsModel> GetMonthDayEvents(DateTime date)
         {
-         
+
 
 
             // var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).SelectMany(c => c.Items, (c,i) => new { c.Created, i.Title, i.Comment, i.Id });
-            var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).Select(c => new { c.Created, items = c.Items.Select(c => new { c.Title, c.Comment, c.Id }) });
+           // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => new { c.Created, i.Title }).ToList();
+
+            var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).Select(c => new GetMonthDayEventsModel { Created = c.Created.Value, Items = c.Items.Select(c => new  ItemsModel{ Title = c.Title, Comment = c.Comment, Id = c.Id }) });
             return results;
         }
 
