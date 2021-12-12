@@ -37,7 +37,7 @@ namespace EventCalendar.Controllers
         //Firebase 
 
         [AllowAnonymous]
-        [HttpPost("FirebaseAuthenticate")]
+        [HttpPost("GoogleAuthenticate")]
         public IActionResult Authenticate([FromBody] AuthenticateRequest data)
         {
             GoogleJsonWebSignature.ValidationSettings settings = new GoogleJsonWebSignature.ValidationSettings();
@@ -46,6 +46,14 @@ namespace EventCalendar.Controllers
             settings.Audience = new List<string>() { "218984349286-j5ri6sd2vkl0u85j2h6g41glgekrlis1.apps.googleusercontent.com" };
 
             GoogleJsonWebSignature.Payload payload = GoogleJsonWebSignature.ValidateAsync(data.IdToken, settings).Result;
+
+            if (!payload.EmailVerified)
+            {
+                return Ok(new {result = false});
+            }
+            
+         
+          
 
             //  var resultTrue = await _signInManager.PasswordSignInAsync(UserName, Password, false, false);
             SymmetricSecurityKey IssuerSigningKey =

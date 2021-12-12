@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
     this.authService.authState.subscribe((user: SocialUser) => {
       console.log(user);
       if (user) {
-        this.http.post<any>(location.origin + "/api/Auth/FirebaseAuthenticate", { idToken: user.idToken }).subscribe((result: any) => {
+        this.http.post<any>(location.origin + "/api/Auth/GoogleAuthenticate", { idToken: user.idToken }).subscribe((result: any) => {
           const token = (<any>result).auth_token;
           console.log("jwt token: " + result.token);
           localStorage.setItem('jwt', result.token);

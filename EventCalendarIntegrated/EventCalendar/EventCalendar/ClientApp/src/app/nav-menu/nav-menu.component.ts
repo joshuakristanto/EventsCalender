@@ -61,21 +61,23 @@ export class NavMenuComponent {
       .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
     localStorage.removeItem('jwt');
 
+    console.log("REDIRECT");
     this.router.navigate([`../login`], { relativeTo: this.route });
-    // this.http.post<any>(location.origin+"/api/Auth/Logout", body, ({ headers: header, params: param })).subscribe(result => {
+    this.http.post<any>(location.origin+"/api/Auth/Logout", body, ({ headers: header, params: param })).subscribe(result => {
 
-    //   const token = (<any>result).auth_token;
-    //   console.log("jwt token2: " + result.token);
-    //   localStorage.setItem('jwt', result.token);
+      // const token = (<any>result).auth_token;
+      // console.log("jwt token2: " + result.token);
+      // localStorage.setItem('jwt', result.token);
      
-    //  // localStorage.removeItem('jwt');
-    //   this.router.navigate([`../`], { relativeTo: this.route });
-    //   // var output = JSON.parse(result);
-    //   // console.log(result[0]['eventsContents']['title']);
-    //   // console.log(result[0]['eventContents']['comment']);
-    //   // this.my_modal_content = result[0]['eventsContents']['title'];
-    //   // this.my_modal_comment = result[0]['eventsContents']['comment']
-    // }, error => console.error(error));
+     localStorage.removeItem('jwt');
+     this.router.navigate([`../login`], { relativeTo: this.route });
+      // this.router.navigate([`../`], { relativeTo: this.route });
+      // var output = JSON.parse(result);
+      // console.log(result[0]['eventsContents']['title']);
+      // console.log(result[0]['eventContents']['comment']);
+      // this.my_modal_content = result[0]['eventsContents']['title'];
+      // this.my_modal_comment = result[0]['eventsContents']['comment']
+    }, error => console.error(error));
 
   }
 
