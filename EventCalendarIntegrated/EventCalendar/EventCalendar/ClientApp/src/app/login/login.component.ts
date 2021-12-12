@@ -2,6 +2,13 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {NgForm} from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { SocialAuthService  } from 'angularx-social-login';
+import { SocialUser } from 'angularx-social-login';
+import { GoogleLoginProvider } from 'angularx-social-login';
+
+
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -10,12 +17,28 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   invalidLogin: boolean = false;
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) { }
+  user: SocialUser | null; 
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private authService: SocialAuthService) { 
+
+    this.user = null;
+    this.authService.authState.subscribe((user: SocialUser) => {
+      console.log(user);
+      this.user = user;
+    });
+
+  }
 
   ngOnInit(): void {
   }
 
+  signInWithGoogle(): void {
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((x: any) => console.log(x));
+  }
 
+  signOut(): void {
+    this.authService.signOut();
+  }  
+  
   login(form:NgForm){
     console.log("UserName " + form.value['username']);
     console.log("Password " + form.value['password']);

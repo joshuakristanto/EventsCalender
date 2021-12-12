@@ -11,4 +11,22 @@
         <br/>
         <button class="btn btn-lg btn-primary btn-block" type="submit"> Sign In</button>
     </div>
+
+    <div>
+      <nav class="navbar navbar-expand navbar-dark bg-dark">
+        <div class="navbar-nav ml-auto" *ngIf="!user">
+          <li class="nav-item">
+            <a (click)="signInWithGoogle()" class="nav-link">Sign in with google</a>
+          </li>
+        </div>
+        <div class="navbar-nav ml-auto" *ngIf="user">
+        <span class="navbar-text">
+         {{ user.email }}
+        </span>	
+          <li class="nav-item">
+            <a class="nav-link" (click)="signOut()">Logout</a>
+          </li>
+        </div>	  
+      </nav>
+      </div>
 </form>
