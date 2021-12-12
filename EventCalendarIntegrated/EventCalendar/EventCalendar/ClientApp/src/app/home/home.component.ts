@@ -8,6 +8,7 @@ import { CalendarView, CalendarEvent,  CalendarMonthViewBeforeRenderEvent,
 import { ViewEventComponent } from '../view-event/view-event.component';
 import { NgbModal, ModalDismissReasons, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -38,13 +39,12 @@ export class HomeComponent {
   modalOptions: NgbModalOptions;
 
   constructor(
-    private modalService: NgbModal, private http: HttpClient
-  ) {
+    private modalService: NgbModal, private http: HttpClient, private router: Router, private route: ActivatedRoute) {
     this.modalOptions = {
       backdrop: 'static',
       backdropClass: 'customBackdrop'
     }
-
+    this.checkLoginState();
    
 
   }
@@ -144,4 +144,44 @@ export class HomeComponent {
     this.getCalendarEvents(this.currentMonth+1, this.currentYear );
     this.refresh.next();
   }
+
+  checkLoginState() {
+
+
+    const param = new HttpParams()
+      .append('date', "this.date.toISOString()");
+
+    const body = JSON.stringify("");
+
+    const header = new HttpHeaders()
+      .append(
+        'Content-Type',
+        'application/json'
+      )
+      .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
+    this.http.get<any>(location.origin + "/Events/CheckLoginState", ({ headers: header, params: param })).subscribe(result => {
+
+
+       // this.login = "Sign-Out";
+
+      }, error =>
+
+      this.errorResponse(error));
+
+
+
+
+  }
+  errorResponse(error: any) {
+    console.log(error['status']);
+    if (error['status'] === 401) {
+      console.log("Please Login Calendar");
+      this.router.navigate([`../login`], { relativeTo: this.route });
+    //  this.login = "Login";
+
+      // alert("Not currently Login. Please Login or create account to have full access.");
+      // this.router.navigate([`../login`], { relativeTo: this.route });
+    }
+  }
+
 }
