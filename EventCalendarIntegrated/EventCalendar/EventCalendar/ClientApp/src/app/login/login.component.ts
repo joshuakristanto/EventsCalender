@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
 
     this.user = null;
     this.authService.authState.subscribe((user: SocialUser) => {
-      console.log(user);
+      // console.log(user);
       if (user) {
         this.http.post<any>(location.origin + "/api/Auth/GoogleAuthenticate", { idToken: user.idToken }).subscribe((result: any) => {
           const token = (<any>result).auth_token;
@@ -42,7 +42,9 @@ export class LoginComponent implements OnInit {
   }
 
   signInWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((x: any) => console.log(x));
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then((x: any) =>{
+      //  console.log(x);
+      });
   }
 
   signOut(): void {
