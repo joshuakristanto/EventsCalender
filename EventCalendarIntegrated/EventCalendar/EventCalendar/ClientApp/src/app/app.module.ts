@@ -27,6 +27,7 @@ import { SocialLoginModule, SocialAuthServiceConfig  } from 'angularx-social-log
 import { GoogleLoginProvider } from 'angularx-social-login';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,6 +40,7 @@ import { GoogleLoginProvider } from 'angularx-social-login';
     ViewEventComponent,
     CreateAccountComponent,
     EditEventComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -61,7 +63,7 @@ import { GoogleLoginProvider } from 'angularx-social-login';
       { path: 'login', component: LoginComponent },
       { path: 'createAccount', component: CreateAccountComponent },
     ]),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   entryComponents: [ ViewEventComponent,  LoginComponent,
     AddEventComponent, CreateAccountComponent, EditEventComponent],

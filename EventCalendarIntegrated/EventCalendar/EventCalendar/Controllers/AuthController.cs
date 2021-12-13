@@ -49,7 +49,8 @@ namespace EventCalendar.Controllers
 
             if (!payload.EmailVerified)
             {
-                return Ok(new {result = false});
+                //  return Ok(new {result = false});
+                return NotFound();
             }
             
          
@@ -98,7 +99,8 @@ namespace EventCalendar.Controllers
 
             if (!result)
             {
-                return Ok(new { result = false });
+             //   return Ok(new { result = false });
+                return NotFound();
             }
 
           //  var resultTrue = await _signInManager.PasswordSignInAsync(UserName, Password, false, false);

@@ -8,7 +8,6 @@ import { SocialUser } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
 
 
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -79,10 +78,17 @@ export class LoginComponent implements OnInit {
       // console.log(result[0]['eventContents']['comment']);
       // this.my_modal_content = result[0]['eventsContents']['title'];
       // this.my_modal_comment = result[0]['eventsContents']['comment']
-    }, error => console.error(error));
+    }, error => this.LoginFailed(error));
 
   }
 
-
+  LoginFailed(error:any){
+    console.log(error); 
+    
+     
+      alert("Login Failed. Please Try Again.");
+     // this.router.navigate([`../login`], { relativeTo: this.route });
+    
+  }
 
 }
