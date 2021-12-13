@@ -45,37 +45,46 @@ namespace EventCalendar.Controllers
             // Change this to your google client ID
             settings.Audience = new List<string>() { "218984349286-j5ri6sd2vkl0u85j2h6g41glgekrlis1.apps.googleusercontent.com" };
 
-            GoogleJsonWebSignature.Payload payload = GoogleJsonWebSignature.ValidateAsync(data.IdToken, settings).Result;
-
-            if (!payload.EmailVerified)
+            try
             {
-                //  return Ok(new {result = false});
+                GoogleJsonWebSignature.Payload payload = GoogleJsonWebSignature.ValidateAsync(data.IdToken, settings).Result;
+                if (!payload.EmailVerified)
+                {
+                    //  return Ok(new {result = false});
+                    return NotFound();
+                }
+
+
+
+
+                //  var resultTrue = await _signInManager.PasswordSignInAsync(UserName, Password, false, false);
+                SymmetricSecurityKey IssuerSigningKey =
+                    new(Encoding.UTF8.GetBytes("CSUN590@8:59PM#cretKey"));
+
+                SigningCredentials signingCreds = new(IssuerSigningKey, SecurityAlgorithms.HmacSha256);
+
+
+                JwtSecurityToken tokenOptions = new JwtSecurityToken(
+                    issuer: "https://www.eventcalendar-2.azurewebsites.net",
+                    audience: "https://www.eventcalendar-2.azurewebsites.net",
+                    claims: new List<Claim>(),
+                    expires: DateTime.Now.AddMinutes(30),
+                    signingCredentials: signingCreds
+                );
+
+
+
+
+                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+                return Ok(new { Token = tokenString });
+            }
+            catch (InvalidJwtException)
+            {
                 return NotFound();
             }
+          
             
          
-          
-
-            //  var resultTrue = await _signInManager.PasswordSignInAsync(UserName, Password, false, false);
-            SymmetricSecurityKey IssuerSigningKey =
-                new(Encoding.UTF8.GetBytes("CSUN590@8:59PM#cretKey"));
-
-            SigningCredentials signingCreds = new(IssuerSigningKey, SecurityAlgorithms.HmacSha256);
-
-
-            JwtSecurityToken tokenOptions = new JwtSecurityToken(
-                issuer: "https://www.eventcalendar-2.azurewebsites.net",
-                audience: "https://www.eventcalendar-2.azurewebsites.net",
-                claims: new List<Claim>(),
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: signingCreds
-            );
-
-
-
-
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            return Ok(new { Token = tokenString });
         }
 
 
