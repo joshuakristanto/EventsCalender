@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -11,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 //using Microsoft.IdentityModel.Tokens.Jwt;
 using EventCalendar.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Google.Apis.Auth;
 
 namespace EventCalendar.Controllers
 {
@@ -25,6 +27,59 @@ namespace EventCalendar.Controllers
             _userManager = userManager;
          //   _signInManager = signInManager;
         }
+
+        public class AuthenticateRequest
+        {
+            [Required]
+            public string IdToken { get; set; }
+        }
+
+        //Firebase 
+
+        [AllowAnonymous]
+        [HttpPost("GoogleAuthenticate")]
+        public IActionResult Authenticate([FromBody] AuthenticateRequest data)
+        {
+            GoogleJsonWebSignature.ValidationSettings settings = new GoogleJsonWebSignature.ValidationSettings();
+
+            // Change this to your google client ID
+            settings.Audience = new List<string>() { "218984349286-j5ri6sd2vkl0u85j2h6g41glgekrlis1.apps.googleusercontent.com" };
+
+            GoogleJsonWebSignature.Payload payload = GoogleJsonWebSignature.ValidateAsync(data.IdToken, settings).Result;
+
+            if (!payload.EmailVerified)
+            {
+                //  return Ok(new {result = false});
+                return NotFound();
+            }
+            
+         
+          
+
+            //  var resultTrue = await _signInManager.PasswordSignInAsync(UserName, Password, false, false);
+            SymmetricSecurityKey IssuerSigningKey =
+                new(Encoding.UTF8.GetBytes("CSUN590@8:59PM#cretKey"));
+
+            SigningCredentials signingCreds = new(IssuerSigningKey, SecurityAlgorithms.HmacSha256);
+
+
+            JwtSecurityToken tokenOptions = new JwtSecurityToken(
+                issuer: "https://www.eventcalendar-2.azurewebsites.net",
+                audience: "https://www.eventcalendar-2.azurewebsites.net",
+                claims: new List<Claim>(),
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: signingCreds
+            );
+
+
+
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            return Ok(new { Token = tokenString });
+        }
+
+
+
 
         [HttpPost]
         [Route("Login")]
@@ -44,7 +99,8 @@ namespace EventCalendar.Controllers
 
             if (!result)
             {
-                return Ok(new { result = false });
+             //   return Ok(new { result = false });
+                return NotFound();
             }
 
           //  var resultTrue = await _signInManager.PasswordSignInAsync(UserName, Password, false, false);

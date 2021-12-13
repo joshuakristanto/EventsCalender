@@ -119,6 +119,7 @@ namespace EventCalendar.Controllers
             return Ok();
         }
 
+           [Authorize]
         [Route("EditItem")]
         [HttpPost]
         public async Task<IActionResult> EditEventItem(DateTime date, string id, string title, string comment)

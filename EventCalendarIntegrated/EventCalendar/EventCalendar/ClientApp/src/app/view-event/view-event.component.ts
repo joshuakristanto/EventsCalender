@@ -210,12 +210,7 @@ export class ViewEventComponent implements OnInit {
 
   }
 
-
-
-
-
-
-
+  
 
 }
 

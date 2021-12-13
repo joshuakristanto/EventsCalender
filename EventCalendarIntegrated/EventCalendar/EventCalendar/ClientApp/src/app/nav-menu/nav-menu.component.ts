@@ -6,6 +6,10 @@ import { AddEventComponent } from '../add-event/add-event.component';
 import { NgbModal, ModalDismissReasons, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SocialAuthService } from 'angularx-social-login';
+import { SocialUser } from 'angularx-social-login';
+import { GoogleLoginProvider } from 'angularx-social-login';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-nav-menu',
@@ -16,7 +20,7 @@ export class NavMenuComponent {
   isExpanded = false;
   @Input() login: string = "Login";
 
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute,private authService: SocialAuthService) {
 
     this.checkLoginState();
 
@@ -33,7 +37,7 @@ export class NavMenuComponent {
     if (error['status'] === 401){
       console.log("Please Login");
       this.login ="Login";
-      alert("Not currently Login. Please Login or create account to have full access.");
+      // alert("Not currently Login. Please Login or create account to have full access.");
      // this.router.navigate([`../login`], { relativeTo: this.route });
     }
   }
@@ -42,7 +46,7 @@ export class NavMenuComponent {
   loginDirective(){
     this.router.navigate([`../login`], { relativeTo: this.route });
   }
-  signOutDirective(){
+   async signOutDirective(){
 
     // console.log("UserName " + form.value['username']);
     // console.log("Password " + form.value['password']);
@@ -59,24 +63,37 @@ export class NavMenuComponent {
         'application/json'
       )
       .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
+    
 
-    this.http.post<any>(location.origin+"/api/Auth/Logout", body, ({ headers: header, params: param })).subscribe(result => {
+    console.log("REDIRECT");
+    
+    await this.authService.signOut().then(() => { localStorage.removeItem('jwt');this.router.navigate([`../login`], { relativeTo: this.route });}).catch(() => { localStorage.removeItem('jwt');this.router.navigate([`../login`], { relativeTo: this.route });});
+    localStorage.removeItem('jwt');
+    console.log("LOGOUT DIRECTIVE");
+    this.router.navigate([`../login`], { relativeTo: this.route });
+    
+    
+      // this.router.navigate([`../login`], { relativeTo: this.route });
+    
+    // this.http.post<any>(location.origin+"/api/Auth/Logout", body, ({ headers: header, params: param })).subscribe(result => {
 
-      const token = (<any>result).auth_token;
-      console.log("jwt token2: " + result.token);
-      localStorage.setItem('jwt', result.token);
+    //   // const token = (<any>result).auth_token;
+    //   // console.log("jwt token2: " + result.token);
+    //   // localStorage.setItem('jwt', result.token);
      
-     // localStorage.removeItem('jwt');
-      this.router.navigate([`../`], { relativeTo: this.route });
-      // var output = JSON.parse(result);
-      // console.log(result[0]['eventsContents']['title']);
-      // console.log(result[0]['eventContents']['comment']);
-      // this.my_modal_content = result[0]['eventsContents']['title'];
-      // this.my_modal_comment = result[0]['eventsContents']['comment']
-    }, error => console.error(error));
+    //  localStorage.removeItem('jwt');
+    //  this.router.navigate([`../login`], { relativeTo: this.route });
+    //   // this.router.navigate([`../`], { relativeTo: this.route });
+    //   // var output = JSON.parse(result);
+    //   // console.log(result[0]['eventsContents']['title']);
+    //   // console.log(result[0]['eventContents']['comment']);
+    //   // this.my_modal_content = result[0]['eventsContents']['title'];
+    //   // this.my_modal_comment = result[0]['eventsContents']['comment']
+    // }, error => console.error(error));
 
   }
 
+  
   buttonTask(){
     if(this.login ==='Login'){
       this.loginDirective();

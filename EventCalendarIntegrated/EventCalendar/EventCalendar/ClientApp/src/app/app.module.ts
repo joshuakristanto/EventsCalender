@@ -23,6 +23,10 @@ import {MatNativeDateModule} from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CreateAccountComponent } from './create-account/create-account.component';
 
+import { SocialLoginModule, SocialAuthServiceConfig  } from 'angularx-social-login';
+import { GoogleLoginProvider } from 'angularx-social-login';
+
+
 
 @NgModule({
   declarations: [
@@ -36,6 +40,7 @@ import { CreateAccountComponent } from './create-account/create-account.componen
     ViewEventComponent,
     CreateAccountComponent,
     EditEventComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -46,6 +51,7 @@ import { CreateAccountComponent } from './create-account/create-account.componen
     ReactiveFormsModule,
     MatNativeDateModule,
     FormsModule,
+    SocialLoginModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,
@@ -57,11 +63,26 @@ import { CreateAccountComponent } from './create-account/create-account.componen
       { path: 'login', component: LoginComponent },
       { path: 'createAccount', component: CreateAccountComponent },
     ]),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   entryComponents: [ ViewEventComponent,  LoginComponent,
     AddEventComponent, CreateAccountComponent, EditEventComponent],
-  providers: [],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
+    providers: [
+      {
+        provide: 'SocialAuthServiceConfig',
+        useValue: {
+          autoLogin: false,
+          providers: [
+            {
+              id: GoogleLoginProvider.PROVIDER_ID,
+              provider: new GoogleLoginProvider(
+                // replace this with your google client id			
+                '218984349286-j5ri6sd2vkl0u85j2h6g41glgekrlis1.apps.googleusercontent.com'
+              )
+            }
+          ]
+        } as SocialAuthServiceConfig,
+      },],
+    bootstrap: [AppComponent]
+  })
+  export class AppModule { }
