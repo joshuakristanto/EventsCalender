@@ -9,5 +9,6 @@ namespace EventCalendar.ViewModels
     {
         public DateTime Created { get; set; }
         public string Title { get; set; }
+       // public IEnumerable<string> Title { get; set; }
     }
 }
