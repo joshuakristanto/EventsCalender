@@ -84,6 +84,11 @@ namespace EventCalendar
                     };
 
                 });
+            services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = "218984349286-j5ri6sd2vkl0u85j2h6g41glgekrlis1.apps.googleusercontent.com";
+                googleOptions.ClientSecret = "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";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
