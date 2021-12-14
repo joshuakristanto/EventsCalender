@@ -37,7 +37,6 @@ namespace EventCalendar.Classes
 
             foreach (var events in localEventComplete)
             {
-                Console.WriteLine("Order: order.Created");
 
                 //var comm =localComment.Find(events.EventsContents);
 
@@ -66,7 +65,6 @@ namespace EventCalendar.Classes
 
             foreach (var events in localEventComplete)
             {
-                Console.WriteLine("Order: order.Created");
 
                 //var comm =localComment.Find(events.EventsContents);
 
