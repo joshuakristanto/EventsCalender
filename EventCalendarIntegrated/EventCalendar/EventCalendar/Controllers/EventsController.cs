@@ -43,12 +43,7 @@ namespace EventCalendar.Controllers
         [HttpGet]
         public IEnumerable GetMonthEvents( int month, int year)
         {
-           
-            
-
             return _calendarDb.GetMonthEvents(month, year);
-
-
 
         }
 
@@ -95,19 +90,27 @@ namespace EventCalendar.Controllers
             //   var results2 = db.Events.Single(c => c.Created == date.);
             return results;
         }
+
+
         [Authorize]
         [Route("Add")]
         [HttpPost]
         public IActionResult AddEvent(DateTime date, string title, string comment)
-        {
-            
-
+        { 
             _calendarDb.AddEvent(date, title, comment);
-            
-            
-
-           return Ok();
+         return Ok();
         }
+
+
+        [Authorize]
+        [Route("AddToday")]
+        [HttpPost]
+        public IActionResult AddEventToday( string title, string comment)
+        {
+            _calendarDb.AddEventToday( title, comment);
+            return Ok();
+        }
+
         [Authorize]
         [Route("Delete")]
         [HttpPost]
@@ -118,8 +121,18 @@ namespace EventCalendar.Controllers
             return Ok();
         }
 
+        [Authorize]
+        [Route("DeleteToday")]
+        [HttpPost]
+        public IActionResult DeleteToday()
+        {
+            _calendarDb.DeleteToday();
 
-         [Authorize]
+            return Ok();
+        }
+
+
+        [Authorize]
         [Route("DeleteItem")]
         [HttpPost]
         public async Task<IActionResult> DeleteEventItem(DateTime date, string id)
@@ -130,7 +143,8 @@ namespace EventCalendar.Controllers
             return Ok();
         }
 
-           [Authorize]
+
+        [Authorize]
         [Route("EditItem")]
         [HttpPost]
         public async Task<IActionResult> EditEventItem(DateTime date, string id, string title, string comment)
@@ -139,15 +153,25 @@ namespace EventCalendar.Controllers
 
             return Ok();
         }
+
+
+
+        [Route("EditItemToday")]
+        [HttpPost]
+        public async Task<IActionResult> EditEventItemToday( string id, string title, string comment)
+        {
+            _calendarDb.EditEventItemToday( id, title, comment);
+
+            return Ok();
+        }
+
+
+
         [Authorize]
         [HttpGet]
         [Route("CheckLoginState")]
-
         public async Task<IActionResult> LoginState()
         {
-
-
-
             return Ok();
 
         }

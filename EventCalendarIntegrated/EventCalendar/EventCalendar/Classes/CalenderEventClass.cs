@@ -146,7 +146,6 @@ namespace EventCalendar.Classes
                 var eventContents = new EventsContents()
                 {
                     Id = uniqueId,
-                    //   CommentCreated = date,
                     Comment = comment,
                     Title = title,
                     EventId = uniqueId,
