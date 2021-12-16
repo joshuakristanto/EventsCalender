@@ -233,7 +233,7 @@ namespace EventCalendar.UnitTesting
         }
 
         [TestMethod]
-        public void GetMonthContentTest()
+        public void GetMonthTest()
         {
             var optionsBuilder = new DbContextOptionsBuilder<CalendarEventData>()
                 .UseInMemoryDatabase(databaseName: "EventCalendar").Options;
@@ -272,6 +272,63 @@ namespace EventCalendar.UnitTesting
                     TestContext.WriteLine("Message..." + localResults.Created);
                     TestContext.WriteLine("Message..." +i);
                     Assert.AreEqual(monthEvents.ToList()[i].Title , localResults.Title);
+                    Assert.AreEqual(monthEvents.ToList()[i].Created, localResults.Created);
+                    i++;
+                }
+
+
+            }
+
+        }
+
+
+        [TestMethod]
+        public void GetMonthContentTest()
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<CalendarEventData>()
+                .UseInMemoryDatabase(databaseName: "EventCalendar").Options;
+
+            CalendarEventData eventData = new CalendarEventData(optionsBuilder);
+            CalenderEventClass eventClass = new CalenderEventClass(eventData);
+
+
+            eventClass.AddEvent(DateTime.Parse("2021-11-30T08:00:00"), "Title", "Comment");
+            eventClass.AddEvent(DateTime.Parse("2021-11-27T08:00:00"), "Title2", "Comment2");
+            eventClass.AddEvent(DateTime.Parse("2021-11-28T08:00:00"), "Title2", "Comment2");
+            eventClass.AddEvent(DateTime.Parse("2021-11-23T08:00:00"), "Title2", "Comment2");
+            eventClass.AddEvent(DateTime.Parse("2021-11-21T08:00:00"), "Title2", "Comment2");
+
+            IEnumerable<GetMonthEventContentModel> monthEvents = eventClass.GetMonthEventContents(11, 2021);
+
+
+            List<GetMonthEventContentModel> localEventComplete = eventData.Events
+                .Where(c => c.Month == 11 && c.Year == 2021)
+                .SelectMany(c => c.Items, (c, i) => new GetMonthEventContentModel { Created = c.Created.Value, Title = i.Title, Comment = i.Comment })
+                .ToList();
+
+            int i = 0;
+            foreach (var events in localEventComplete)
+            {
+
+                //var comm =localComment.Find(events.EventsContents);
+
+
+                foreach (var localResults in localEventComplete)
+                {
+                    if (i >= monthEvents.ToList().Count)
+                    {
+                        break;
+                    }
+                    TestContext.WriteLine("Message..." + monthEvents.ToList()[i].Title);
+                    TestContext.WriteLine("Message..." + localResults.Title);
+                    TestContext.WriteLine("Message..." + monthEvents.ToList()[i].Created);
+                    TestContext.WriteLine("Message..." + localResults.Created);
+                    TestContext.WriteLine("Message..." + monthEvents.ToList()[i].Comment);
+                    TestContext.WriteLine("Message..." + localResults.Comment);
+                    TestContext.WriteLine("Message..." + i);
+                    Assert.AreEqual(monthEvents.ToList()[i].Title, localResults.Title);
+                    Assert.AreEqual(monthEvents.ToList()[i].Created, localResults.Created);
+                    Assert.AreEqual(monthEvents.ToList()[i].Comment, localResults.Comment);
                     i++;
                 }
 
