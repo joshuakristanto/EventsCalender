@@ -131,18 +131,33 @@ export class HomeComponent {
 
   nextMonth(){
     this.currentMonth =  this.currentMonth + 1;
-    if(this.currentMonth >12 )
+    if(this.currentMonth >=12 )
     {
       this.currentMonth = 0;
       this.currentYear = this.currentYear + 1;
     }
+    console.log("Month: ", this.currentMonth + 1, this.currentYear);
     this.getCalendarEvents(this.currentMonth+1, this.currentYear );
     this.refresh.next();
   }
   pastMonth(){
-    this.currentMonth =  this.currentMonth - 1;
+    this.currentMonth = this.currentMonth - 1;
+    if (this.currentMonth < 0) {
+      this.currentMonth = 11;
+      this.currentYear = this.currentYear - 1;
+    }
+    console.log("Month: ", this.currentMonth + 1, this.currentYear);
     this.getCalendarEvents(this.currentMonth+1, this.currentYear );
     this.refresh.next();
+  }
+  activeMonth() {
+
+    this.currentMonth = new Date().getMonth();
+    this.currentYear = new Date().getFullYear();
+    console.log("Month: ", this.currentMonth + 1, this.currentYear);
+    this.getCalendarEvents(this.currentMonth+1, this.currentYear);
+    this.refresh.next();
+
   }
 
   checkLoginState() {

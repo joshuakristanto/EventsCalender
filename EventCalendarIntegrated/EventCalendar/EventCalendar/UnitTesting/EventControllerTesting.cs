@@ -129,6 +129,8 @@ namespace EventCalendar.UnitTesting
 
             eventClass.DeleteEventItem(date, id[0].Id);
 
+            results = eventData.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).Select(c => new { c.Created, items = c.Items.Select(c => new { c.Title, c.Comment, c.Id }) }).ToList();
+            id = results[0].items.Select(c => new { c.Id, c.Title, c.Comment }).ToList();
             TestContext.WriteLine("Message..." + results.Count);
             Assert.AreEqual(1, results.Count);
 
