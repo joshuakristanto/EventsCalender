@@ -83,12 +83,19 @@ namespace EventCalendar
 
                     };
 
+                })
+                .AddGoogle(googleOptions =>
+                {
+                    googleOptions.ClientId = Configuration["GoogleCloud:ClientId"];
+                    googleOptions.ClientSecret = Configuration["GoogleCloud:ClientSecret"];
                 });
+            /*
             services.AddAuthentication().AddGoogle(googleOptions =>
             {
                 googleOptions.ClientId = Configuration["GoogleCloud:ClientId"];
                 googleOptions.ClientSecret = Configuration["GoogleCloud:ClientSecret"];
             });
+            */
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

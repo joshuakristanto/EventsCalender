@@ -34,7 +34,7 @@ namespace EventCalendar.Controllers
             public string IdToken { get; set; }
         }
 
-        //Firebase 
+        //Authenticate with Google 
 
         [AllowAnonymous]
         [HttpPost("GoogleAuthenticate")]
