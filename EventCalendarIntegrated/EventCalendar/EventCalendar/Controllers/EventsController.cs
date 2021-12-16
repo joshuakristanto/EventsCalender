@@ -92,7 +92,7 @@ namespace EventCalendar.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [Route("Add")]
         [HttpPost]
         public IActionResult AddEvent(DateTime date, string title, string comment)
@@ -102,7 +102,7 @@ namespace EventCalendar.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [Route("AddToday")]
         [HttpPost]
         public IActionResult AddEventToday( string title, string comment)
@@ -111,7 +111,7 @@ namespace EventCalendar.Controllers
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [Route("Delete")]
         [HttpPost]
         public IActionResult DeleteEvent(DateTime date)
@@ -121,7 +121,7 @@ namespace EventCalendar.Controllers
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [Route("DeleteToday")]
         [HttpPost]
         public IActionResult DeleteToday()
@@ -132,7 +132,7 @@ namespace EventCalendar.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [Route("DeleteTodayEventItem")]
         [HttpPost]
         public IActionResult DeleteTodayEventItem(string id)
@@ -143,7 +143,7 @@ namespace EventCalendar.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [Route("DeleteItem")]
         [HttpPost]
         public async Task<IActionResult> DeleteEventItem(DateTime date, string id)
@@ -155,7 +155,7 @@ namespace EventCalendar.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [Route("EditItem")]
         [HttpPost]
         public async Task<IActionResult> EditEventItem(DateTime date, string id, string title, string comment)
@@ -166,7 +166,7 @@ namespace EventCalendar.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin")]
         [Route("EditItemToday")]
         [HttpPost]
         public async Task<IActionResult> EditEventItemToday( string id, string title, string comment)

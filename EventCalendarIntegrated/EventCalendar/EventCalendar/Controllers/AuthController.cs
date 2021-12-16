@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.Design;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -62,12 +63,13 @@ namespace EventCalendar.Controllers
                     new(Encoding.UTF8.GetBytes("CSUN590@8:59PM#cretKey"));
 
                 SigningCredentials signingCreds = new(IssuerSigningKey, SecurityAlgorithms.HmacSha256);
-
+                List<Claim> claim = new List<Claim>();
+                claim.Add(new Claim(ClaimTypes.Role, "Admin"));
 
                 JwtSecurityToken tokenOptions = new JwtSecurityToken(
                     issuer: "https://www.eventcalendar-2.azurewebsites.net",
                     audience: "https://www.eventcalendar-2.azurewebsites.net",
-                    claims: new List<Claim>(),
+                    claims: claim,
                     expires: DateTime.Now.AddMinutes(30),
                     signingCredentials: signingCreds
                 );
@@ -111,18 +113,35 @@ namespace EventCalendar.Controllers
              //   return Ok(new { result = false });
                 return NotFound();
             }
+            List<Claim> claim = new List<Claim>();
+          //  claim.Add(new Claim(ClaimTypes.Role, "Admin"));
+            
+            var guestRoleResult = await _userManager.IsInRoleAsync(user, "Guest");
+            if (guestRoleResult )
+            {
+                claim = new List<Claim>();
+                claim.Add(new Claim(ClaimTypes.Role, "Guest"));
+            }
 
+            var adminRoleResult = await _userManager.IsInRoleAsync(user, "Admin");
+            if (adminRoleResult)
+            {
+                claim = new List<Claim>();
+                claim.Add(new Claim(ClaimTypes.Role, "Admin"));
+            }
+            
           //  var resultTrue = await _signInManager.PasswordSignInAsync(UserName, Password, false, false);
             SymmetricSecurityKey IssuerSigningKey =
                     new(Encoding.UTF8.GetBytes("CSUN590@8:59PM#cretKey"));
 
             SigningCredentials signingCreds = new(IssuerSigningKey, SecurityAlgorithms.HmacSha256);
 
+          
             
             JwtSecurityToken tokenOptions = new JwtSecurityToken(
                 issuer: "https://www.eventcalendar-2.azurewebsites.net",
                 audience: "https://www.eventcalendar-2.azurewebsites.net",
-                claims: new List<Claim>(),
+                claims: claim,
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: signingCreds
             );
@@ -143,7 +162,12 @@ namespace EventCalendar.Controllers
 
         public async Task<IActionResult> Create(string UserName, string Password)
         {
-
+            /*
+            if (Role == null)
+            {
+                Role = "guest";
+            }
+            */
             ApplicationUser user = new()
             {
                 UserName = UserName,
@@ -151,6 +175,7 @@ namespace EventCalendar.Controllers
                 EmailConfirmed = true
             };
             var result = await _userManager.CreateAsync(user, Password);
+           // var role = await _userManager.AddToRoleAsync(user, Role);
             return Ok(result);
         }
 
