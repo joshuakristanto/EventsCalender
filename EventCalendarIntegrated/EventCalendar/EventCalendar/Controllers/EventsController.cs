@@ -133,6 +133,17 @@ namespace EventCalendar.Controllers
 
 
         [Authorize]
+        [Route("DeleteTodayEventItem")]
+        [HttpPost]
+        public IActionResult DeleteTodayEventItem(string id)
+        {
+            _calendarDb.DeleteTodayEventItem(id);
+
+            return Ok();
+        }
+
+
+        [Authorize]
         [Route("DeleteItem")]
         [HttpPost]
         public async Task<IActionResult> DeleteEventItem(DateTime date, string id)
