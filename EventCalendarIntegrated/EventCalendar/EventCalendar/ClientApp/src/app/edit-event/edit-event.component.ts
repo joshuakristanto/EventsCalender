@@ -19,6 +19,8 @@ export class EditEventComponent implements OnInit {
 
   @Input() my_modal_title: any;
   @Input() my_modal_content: any;
+  @Input() titleModal: any;
+  @Input() commentModal: any; 
   @Input() date: any;
   @Input() id: any;
   @Output() update = new EventEmitter<any>();
@@ -34,11 +36,13 @@ export class EditEventComponent implements OnInit {
       backdrop:'static',
       backdropClass:'customBackdrop'
     }
-    
+   
+
   }
 
 
   ngOnInit() {
+    this.fetchData();
   }
 
 
@@ -72,6 +76,32 @@ addEvent( date:Date, localTitle: string, localComment: string){
 this.activeModal.close("Close click");
 // this.updateEvent(date);
   
+
+  }
+fetchData() {
+
+  console.log("ID", this.id);
+  const param = new HttpParams()
+    
+    .append('id', this.id);
+
+  const body = JSON.stringify("");
+
+  const header = new HttpHeaders()
+    .append(
+      'Content-Type',
+      'application/json'
+    )
+    .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
+
+  this.http.get<EventFetch>(location.origin + "/Events/EventContent", ({ headers: header, params: param })).subscribe(result => {
+   // this.update.emit({ update: "Update" });
+   console.log("TITLE", result);
+    this.titleModal = result[0]["title"];
+    this.commentModal = result[0]["comment"];
+  }, error => console.error(error));
+
+
 
 }
 
@@ -138,3 +168,10 @@ interface Event {
   title: string;
   comment: string;
 }
+
+interface EventFetch {
+
+  title: string;
+  comment: string;
+}
+

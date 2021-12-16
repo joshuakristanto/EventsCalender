@@ -70,7 +70,18 @@ namespace EventCalendar.Controllers
         {
             return _calendarDb.GetMonthDayEvents(date);
         }
-         [Authorize]
+
+
+
+        [Authorize]
+        [Route("EventContent")]
+        [HttpGet]
+        public IEnumerable GetEventContent(string id)
+        {
+            return _calendarDb.GetEventContentModel(id);
+        }
+
+        [Authorize]
         [Route("Test")]
         [HttpGet]
         public IEnumerable Test(DateTime date)

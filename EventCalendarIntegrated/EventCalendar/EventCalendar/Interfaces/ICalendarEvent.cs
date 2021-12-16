@@ -12,6 +12,7 @@ namespace EventCalendar.Interfaces
         IEnumerable <GetMonthEventsModel> GetMonthEvents(int month, int year);
         IEnumerable <GetMonthEventContentModel> GetMonthEventContents(int month, int year);
         IEnumerable <GetMonthDayEventsModel> GetMonthDayEvents(DateTime date);
+        IEnumerable<GetEventContentModel> GetEventContentModel(string eventId);
         void AddEvent(DateTime date, string title, string comment);
         void AddEventToday(string title, string comment);
         void DeleteToday();
