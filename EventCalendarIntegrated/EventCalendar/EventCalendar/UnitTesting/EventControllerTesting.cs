@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using System.Collections;
 using EventCalendar.ViewModels;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 
 namespace EventCalendar.UnitTesting
 {
@@ -66,8 +67,8 @@ namespace EventCalendar.UnitTesting
                             p.Created.Value.Date.Year == date.Year)
                 .Select(c => new AddEventTestModel
                 {
-                   Created = c.Created.Value, Items = c.Items
-                        .Select(c => new ItemsModel {Title = c.Title, Comment = c.Comment, Id = c.Id} )
+                    Created = c.Created.Value, Items = c.Items
+                        .Select(c => new ItemsModel {Title = c.Title, Comment = c.Comment, Id = c.Id})
                 }).ToList();
 
             TestContext.WriteLine("Message..." + results[0].Created);
@@ -99,7 +100,7 @@ namespace EventCalendar.UnitTesting
                 {
                     Created = c.Created.Value,
                     Items = c.Items
-                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id })
+                        .Select(c => new ItemsModel {Title = c.Title, Comment = c.Comment, Id = c.Id})
                 }).ToList();
 
 
@@ -123,12 +124,12 @@ namespace EventCalendar.UnitTesting
                 {
                     Created = c.Created.Value,
                     Items = c.Items
-                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id })
+                        .Select(c => new ItemsModel {Title = c.Title, Comment = c.Comment, Id = c.Id})
                 }).ToList();
 
 
             id = results[0].Items
-                .Select(c => new ItemsModel() { Id = c.Id, Title = c.Title, Comment = c.Comment })
+                .Select(c => new ItemsModel() {Id = c.Id, Title = c.Title, Comment = c.Comment})
                 .ToList();
 
 
@@ -165,7 +166,7 @@ namespace EventCalendar.UnitTesting
                 {
                     Created = c.Created.Value,
                     Items = c.Items
-                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id })
+                        .Select(c => new ItemsModel {Title = c.Title, Comment = c.Comment, Id = c.Id})
                 }).ToList();
 
 
@@ -199,12 +200,12 @@ namespace EventCalendar.UnitTesting
                 {
                     Created = c.Created.Value,
                     Items = c.Items
-                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id })
+                        .Select(c => new ItemsModel {Title = c.Title, Comment = c.Comment, Id = c.Id})
                 }).ToList();
 
 
             var id = results[0].Items
-                .Select(c => new ItemsModel() { Id = c.Id, Title = c.Title, Comment = c.Comment })
+                .Select(c => new ItemsModel() {Id = c.Id, Title = c.Title, Comment = c.Comment})
                 .ToList();
 
 
@@ -217,13 +218,13 @@ namespace EventCalendar.UnitTesting
                 {
                     Created = c.Created.Value,
                     Items = c.Items
-                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id })
+                        .Select(c => new ItemsModel {Title = c.Title, Comment = c.Comment, Id = c.Id})
                 }).ToList();
 
 
 
             id = results[0].Items
-                .Select(c => new ItemsModel() { Id = c.Id, Title = c.Title, Comment = c.Comment })
+                .Select(c => new ItemsModel() {Id = c.Id, Title = c.Title, Comment = c.Comment})
                 .ToList();
 
             TestContext.WriteLine("Message..." + results.Count);
@@ -262,7 +263,7 @@ namespace EventCalendar.UnitTesting
             {
 
                 //var comm =localComment.Find(events.EventsContents);
-               
+
 
                 foreach (var localResults in events)
                 {
@@ -270,8 +271,8 @@ namespace EventCalendar.UnitTesting
                     TestContext.WriteLine("Message..." + localResults.Title);
                     TestContext.WriteLine("Message..." + monthEvents.ToList()[i].Created);
                     TestContext.WriteLine("Message..." + localResults.Created);
-                    TestContext.WriteLine("Message..." +i);
-                    Assert.AreEqual(monthEvents.ToList()[i].Title , localResults.Title);
+                    TestContext.WriteLine("Message..." + i);
+                    Assert.AreEqual(monthEvents.ToList()[i].Title, localResults.Title);
                     Assert.AreEqual(monthEvents.ToList()[i].Created, localResults.Created);
                     i++;
                 }
@@ -301,10 +302,14 @@ namespace EventCalendar.UnitTesting
             IEnumerable<GetMonthEventContentModel> monthEvents = eventClass.GetMonthEventContents(11, 2021);
 
 
-            List<GetMonthEventContentModel> localEventComplete = eventData.Events
+
+
+            List<IEnumerable<GetMonthEventContentModel>> localEventComplete = eventData.Events
                 .Where(c => c.Month == 11 && c.Year == 2021)
-                .SelectMany(c => c.Items, (c, i) => new GetMonthEventContentModel { Created = c.Created.Value, Title = i.Title, Comment = i.Comment })
-                .ToList();
+                .Select(c => c.Items.Select(k => new GetMonthEventContentModel
+                    {Created = c.Created.Value, Title = k.Title, Comment = k.Comment})).ToList();
+
+
 
             int i = 0;
             foreach (var events in localEventComplete)
@@ -313,12 +318,13 @@ namespace EventCalendar.UnitTesting
                 //var comm =localComment.Find(events.EventsContents);
 
 
-                foreach (var localResults in localEventComplete)
+                foreach (var localResults in events)
                 {
                     if (i >= monthEvents.ToList().Count)
                     {
                         break;
                     }
+
                     TestContext.WriteLine("Message..." + monthEvents.ToList()[i].Title);
                     TestContext.WriteLine("Message..." + localResults.Title);
                     TestContext.WriteLine("Message..." + monthEvents.ToList()[i].Created);
@@ -335,6 +341,44 @@ namespace EventCalendar.UnitTesting
 
             }
 
+        }
+
+        [TestMethod]
+        public void GetEventContent()
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<CalendarEventData>()
+                .UseInMemoryDatabase(databaseName: "EventCalendar").Options;
+
+            CalendarEventData eventData = new CalendarEventData(optionsBuilder);
+            CalenderEventClass eventClass = new CalenderEventClass(eventData);
+
+
+            eventClass.AddEvent(DateTime.Parse("2021-11-30T08:00:00"), "Title", "Comment");
+            eventClass.AddEvent(DateTime.Parse("2021-11-27T08:00:00"), "Title2", "Comment2");
+            eventClass.AddEvent(DateTime.Parse("2021-11-28T08:00:00"), "Title2", "Comment2");
+            eventClass.AddEvent(DateTime.Parse("2021-11-23T08:00:00"), "Title2", "Comment2");
+            eventClass.AddEvent(DateTime.Parse("2021-11-21T08:00:00"), "Title2", "Comment2");
+
+            List<EventContentTestModel> eventIDs = eventData.EventsContents.Select(c => new EventContentTestModel(){ EventId = c.Id,Title= c.Title}).ToList();
+
+            foreach (var items in eventIDs)
+            {
+                List<GetEventContentModel> resultsEventContents = eventData.EventsContents
+                    .Where(c => c.Id == items.EventId)
+                    .Select(d => new GetEventContentModel { Title = d.Title, Comment = d.Comment })
+                    .ToList();
+                foreach (var item in resultsEventContents)
+                {
+                    Assert.AreEqual(item.Title, items.Title);
+                }
+
+            }
+
+            
+            
+
+
+          
         }
     }
 }

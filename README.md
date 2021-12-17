@@ -5,9 +5,11 @@
 ## Features
 * Unit Testing
 * Login System
+    - Login with Google.
+    - Role Section to Login with Google. 
 * Data Shaped Data flow between Database and Client
 * Integrated Client and Backend. 
-* Hosted in Azure for Cloud and MySQL backend. 
+* Hosted in Azure for Cloud and SQL backend by Azure. 
 # Login Credentials
 ## Admin
 * Username : J8
@@ -15,3 +17,5 @@
 ## Guest
 * Username: J9
 * Password : Hello#9
+ -------------
+* Loging-in with Google will also Result in Guest Mode
