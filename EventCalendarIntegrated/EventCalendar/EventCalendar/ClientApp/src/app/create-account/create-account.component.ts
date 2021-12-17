@@ -11,19 +11,26 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class CreateAccountComponent implements OnInit {
 
   invalidLogin: boolean = false;
+  role: string = "Guest";
   constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    
   }
 
-
+  onChange(deviceValue)
+  {
+    console.log(deviceValue);
+    this.role = deviceValue;
+  }
   login(form:NgForm){
     console.log("UserName " + form.value['username']);
     console.log("Password " + form.value['password']);
     const param = new HttpParams()
     // .append('date', this.date.toISOString());
     .append('UserName',form.value['username'])
-    .append('Password', form.value['password']);
+    .append('Password', form.value['password']
+    .apeend('Role', this.role));
 
 const body=JSON.stringify("");
 

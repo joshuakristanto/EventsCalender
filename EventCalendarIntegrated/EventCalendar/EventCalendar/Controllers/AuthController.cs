@@ -67,7 +67,7 @@ namespace EventCalendar.Controllers
 
                 SigningCredentials signingCreds = new(IssuerSigningKey, SecurityAlgorithms.HmacSha256);
                 List<Claim> claim = new List<Claim>();
-                claim.Add(new Claim(ClaimTypes.Role, "Admin"));
+                claim.Add(new Claim(ClaimTypes.Role, "Guest"));
 
                 JwtSecurityToken tokenOptions = new JwtSecurityToken(
                     issuer: "https://www.eventcalendar-2.azurewebsites.net",

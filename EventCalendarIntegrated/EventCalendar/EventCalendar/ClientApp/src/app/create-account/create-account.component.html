@@ -9,6 +9,18 @@
         <br/>
         <input type="password" id ="password" name="password" ngModel class="form-control" placeholder="Password">
         <br/>
+        <select name="users" ng-model="userSelect" (change)="onChange($event.target.value)">
+
+            <option value="">--Select Role--</option>
+            
+            <option value="Admin">Admin</option>
+            
+            <option value="Guest">Guest</option>
+            
+        </select>
+        <br/>
+        <br/>
         <button class="btn btn-lg btn-primary btn-block" type="submit"> Sign Up</button>
+        
     </div>
 </form>
