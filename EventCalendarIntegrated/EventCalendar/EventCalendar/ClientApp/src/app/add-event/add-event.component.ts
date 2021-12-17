@@ -62,7 +62,7 @@ addEvent( date:Date, localTitle: string, localComment: string){
 
   this.http.post<Event>(location.origin+"/Events/Add", body,({headers: header, params:param}) ).subscribe(result => {
     this.update.emit({update: "Update"});
-     }, error => console.error(error));
+     }, error => this.errorResponse(error));
 
 
     
@@ -121,13 +121,28 @@ console.log("ADD-EVENT"+result[0]['eventsContents']['title']);
   modalRef.componentInstance.my_modal_comment = result[0]['eventsContents']['comment']
   console.log("DATE" + ":" + result[0]['created']);
   modalRef.componentInstance.date =date;
- }, error => console.error(error));
+ }, error => this.errorResponse(error));
 
 
 
 }
 
 
+errorResponse(error: any) {
+  console.log(error);
+  console.log(error['status']);
+  if (error['status'] === 401) {
+    console.log("Please Login Calendar");
+    // this.router.navigate([`../login`], { relativeTo: this.route });
+  //  this.login = "Login";
+
+    // alert("Not currently Login. Please Login or create account to have full access.");
+    // this.router.navigate([`../login`], { relativeTo: this.route });
+  }
+  if (error['status'] === 403) {
+    alert("You do not have the rights to do this actions. Error 403 Forbidden.");
+  }
+}
 
 
 }

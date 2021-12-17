@@ -187,13 +187,19 @@ export class HomeComponent {
 
 
   }
+
+  
+  
   errorResponse(error: any) {
+    console.log(error);
     console.log(error['status']);
     if (error['status'] === 401) {
       console.log("Please Login Calendar");
       this.router.navigate([`../login`], { relativeTo: this.route });
     //  this.login = "Login";
-
+    if (error['status'] === 403) {
+      alert("You do not have the rights to do this actions. Error 403 Forbidden.");
+    }
       // alert("Not currently Login. Please Login or create account to have full access.");
       // this.router.navigate([`../login`], { relativeTo: this.route });
     }
