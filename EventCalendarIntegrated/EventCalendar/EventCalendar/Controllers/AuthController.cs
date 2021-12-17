@@ -22,11 +22,14 @@ namespace EventCalendar.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
+
+        private readonly RoleManager<IdentityRole> _roleManager;
        // private readonly SignInManager<IdentityUser> _signInManager;
-        public AuthController(UserManager<ApplicationUser> userManager)
+        public AuthController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
-         //   _signInManager = signInManager;
+            _roleManager = roleManager;
+            //   _signInManager = signInManager;
         }
 
         public class AuthenticateRequest
@@ -160,14 +163,14 @@ namespace EventCalendar.Controllers
         [HttpPost]
         [Route("Create")]
 
-        public async Task<IActionResult> Create(string UserName, string Password)
+        public async Task<IActionResult> Create(string UserName, string Password, string Role)
         {
-            /*
+            
             if (Role == null)
             {
                 Role = "guest";
             }
-            */
+            
             ApplicationUser user = new()
             {
                 UserName = UserName,
@@ -175,7 +178,13 @@ namespace EventCalendar.Controllers
                 EmailConfirmed = true
             };
             var result = await _userManager.CreateAsync(user, Password);
-           // var role = await _userManager.AddToRoleAsync(user, Role);
+            var newRole = await _roleManager.RoleExistsAsync(Role);
+
+            if (!newRole)
+            {
+                var roleResult = await _roleManager.CreateAsync(new IdentityRole(Role));
+            }
+            var role = await _userManager.AddToRoleAsync(user, Role);
             return Ok(result);
         }
 
