@@ -68,17 +68,29 @@ namespace EventCalendar.Classes
            // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => new { c.Created, i.Title, i.Comment }).ToList();
             // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).ToList();
 
+            /*
 
             List<GetMonthEventContentModel> localEventComplete = localEvent
                 .Where(c => c.Month == month && c.Year == year)
                 .SelectMany(c => c.Items, (c, i) => new GetMonthEventContentModel { Created = c.Created.Value, Title = i.Title, Comment = i.Comment })
                 .ToList();
+            */
+
+            List<IEnumerable<GetMonthEventContentModel>> localEventComplete = localEvent
+                .Where(c => c.Month == month && c.Year == year)
+                .Select( c => c.Items.Select(k => new GetMonthEventContentModel {Created = c.Created.Value, Title = k.Title, Comment = k.Comment} ) ).ToList();
+
+
+                
 
             foreach (var events in localEventComplete)
             {
 
 
-                yield return events;
+                foreach (var localResults in events)
+                {
+                    yield return localResults;
+                }
             }
         }
 
