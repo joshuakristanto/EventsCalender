@@ -43,12 +43,7 @@ namespace EventCalendar.Controllers
         [HttpGet]
         public IEnumerable GetMonthEvents( int month, int year)
         {
-           
-            
-
             return _calendarDb.GetMonthEvents(month, year);
-
-
 
         }
 
@@ -70,7 +65,18 @@ namespace EventCalendar.Controllers
         {
             return _calendarDb.GetMonthDayEvents(date);
         }
-         [Authorize]
+
+
+
+        [Authorize]
+        [Route("EventContent")]
+        [HttpGet]
+        public IEnumerable GetEventContent(string id)
+        {
+            return _calendarDb.GetEventContentModel(id);
+        }
+
+        [Authorize]
         [Route("Test")]
         [HttpGet]
         public IEnumerable Test(DateTime date)
@@ -84,20 +90,28 @@ namespace EventCalendar.Controllers
             //   var results2 = db.Events.Single(c => c.Created == date.);
             return results;
         }
-        [Authorize]
+
+
+        [Authorize(Roles = "Admin")]
         [Route("Add")]
         [HttpPost]
         public IActionResult AddEvent(DateTime date, string title, string comment)
-        {
-            
-
+        { 
             _calendarDb.AddEvent(date, title, comment);
-            
-            
-
-           return Ok();
+         return Ok();
         }
-        [Authorize]
+
+
+        [Authorize(Roles = "Admin")]
+        [Route("AddToday")]
+        [HttpPost]
+        public IActionResult AddEventToday( string title, string comment)
+        {
+            _calendarDb.AddEventToday( title, comment);
+            return Ok();
+        }
+
+        [Authorize(Roles = "Admin")]
         [Route("Delete")]
         [HttpPost]
         public IActionResult DeleteEvent(DateTime date)
@@ -107,8 +121,29 @@ namespace EventCalendar.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "Admin")]
+        [Route("DeleteToday")]
+        [HttpPost]
+        public IActionResult DeleteToday()
+        {
+            _calendarDb.DeleteToday();
 
-         [Authorize]
+            return Ok();
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [Route("DeleteTodayEventItem")]
+        [HttpPost]
+        public IActionResult DeleteTodayEventItem(string id)
+        {
+            _calendarDb.DeleteTodayEventItem(id);
+
+            return Ok();
+        }
+
+
+        [Authorize(Roles = "Admin")]
         [Route("DeleteItem")]
         [HttpPost]
         public async Task<IActionResult> DeleteEventItem(DateTime date, string id)
@@ -119,7 +154,8 @@ namespace EventCalendar.Controllers
             return Ok();
         }
 
-           [Authorize]
+
+        [Authorize(Roles = "Admin")]
         [Route("EditItem")]
         [HttpPost]
         public async Task<IActionResult> EditEventItem(DateTime date, string id, string title, string comment)
@@ -128,15 +164,25 @@ namespace EventCalendar.Controllers
 
             return Ok();
         }
+
+
+        [Authorize(Roles = "Admin")]
+        [Route("EditItemToday")]
+        [HttpPost]
+        public async Task<IActionResult> EditEventItemToday( string id, string title, string comment)
+        {
+            _calendarDb.EditEventItemToday( id, title, comment);
+
+            return Ok();
+        }
+
+
+
         [Authorize]
         [HttpGet]
         [Route("CheckLoginState")]
-
         public async Task<IActionResult> LoginState()
         {
-
-
-
             return Ok();
 
         }

@@ -6,7 +6,7 @@ import { AddEventComponent } from '../add-event/add-event.component';
 import { NgbModal, ModalDismissReasons, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { EditEventComponent } from '../edit-event/edit-event.component';
-
+import { ViewEventService } from './view-event.service';
 @Component({
   selector: 'app-view-event',
   templateUrl: './view-event.component.html',
@@ -22,7 +22,7 @@ export class ViewEventComponent implements OnInit {
   @Output() update = new EventEmitter<any>();
   modalOptions: NgbModalOptions;
 
-  constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, private http: HttpClient) {
+  constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, private http: HttpClient, private viewEventService: ViewEventService) {
 
     this.modalOptions = {
       backdrop: 'static',
@@ -43,20 +43,7 @@ export class ViewEventComponent implements OnInit {
   // }
   ngOnInit() {
 
-    const param = new HttpParams()
-      .append('date', this.date.toISOString());
-
-
-    const body = JSON.stringify("");
-    console.log(`Bearer ` + localStorage.getItem('jwt'));
-    const header = new HttpHeaders()
-      .append(
-        'Content-Type',
-        'application/json'
-      )
-      .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
-
-    this.http.get<any>(location.origin+"/Events/Day", ({ headers: header, params: param })).subscribe(result => {
+   this.viewEventService.fetchData(this.date).subscribe(result => {
 
       console.log("Day", result.toString());
       // var output = JSON.parse(result);
@@ -69,9 +56,9 @@ export class ViewEventComponent implements OnInit {
         this.array.push(result[0]['items'][item]);
       }
 
-    }, error => console.error(error));
+    }, error => this.errorResponse(error));
 
-
+    // this.viewEventService.output();
 
 
 
@@ -117,19 +104,9 @@ export class ViewEventComponent implements OnInit {
   }
 
   updateEvent() {
-    const param = new HttpParams()
-      .append('date', this.date.toISOString());
+    
 
-    const body = JSON.stringify("");
-
-    const header = new HttpHeaders()
-      .append(
-        'Content-Type',
-        'application/json'
-      )
-      .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
-    this.http.get<any>(location.origin+"/Events/Day", ({ headers: header, params: param })).subscribe(result => {
-
+    this.viewEventService.updateEvent(this.date).subscribe(result => {
       console.log("Day", result.toString())
       // var output = JSON.parse(result);
       console.log(result[0]);
@@ -142,7 +119,7 @@ export class ViewEventComponent implements OnInit {
         this.array.push(result[0]['items'][item]);
       }
 
-    }, error => console.error(error));
+    }, error => this.errorResponse(error));
 
 
 
@@ -155,23 +132,11 @@ export class ViewEventComponent implements OnInit {
 
     //   }, error => console.error(error));
 
-    const param = new HttpParams()
-      .append('date', date.toISOString());
-
-    const body = JSON.stringify("");
-
-    let token = localStorage.getItem('jwt');
-    const header = new HttpHeaders()
-      .append(
-        'Content-Type',
-        'application/json'
-      )
-      .append('Authorization', `Bearer ${token}`);
-    this.http.post<Event>(location.origin+"/Events/Delete", body, ({ headers: header, params: param })).subscribe(result => {
+    this.viewEventService.deleteEvent(date).subscribe(result => {
       this.updateEvent();
       this.update.emit({ update: "Update" });
 
-    }, error => console.error(error));
+    }, error => this.errorResponse(error));
 
     this.activeModal.close("Close click");
 
@@ -183,31 +148,33 @@ export class ViewEventComponent implements OnInit {
 
     //   }, error => console.error(error));
 
-    console.log("EVENT ID" + eventID);
-
-    const param = new HttpParams()
-      .append('date', date.toISOString())
-      .append('id', eventID);
-
-    const body = JSON.stringify("");
-
-    let token = localStorage.getItem('jwt');
-    const header = new HttpHeaders()
-      .append(
-        'Content-Type',
-        'application/json'
-      )
-      .append('Authorization', `Bearer ${token}`);
-    this.http.post<Event>(location.origin + "/Events/DeleteItem", body, ({ headers: header, params: param })).subscribe(result => {
+    
+    this.viewEventService.deleteEventItem(date,eventID).subscribe(result => {
       this.updateEvent();
       this.update.emit({ update: "Update" });
 
-    }, error => console.error(error));
+    }, error => this.errorResponse(error));
 
     this.updateEvent();
     //this.activeModal.close("Close click");
 
 
+  }
+
+  errorResponse(error: any) {
+    console.log(error);
+    console.log(error['status']);
+    if (error['status'] === 401) {
+      console.log("Please Login Calendar");
+      // this.router.navigate([`../login`], { relativeTo: this.route });
+    //  this.login = "Login";
+
+      // alert("Not currently Login. Please Login or create account to have full access.");
+      // this.router.navigate([`../login`], { relativeTo: this.route });
+    }
+    if (error['status'] === 403) {
+      alert("You do not have the rights to do this actions. Error 403 Forbidden.");
+    }
   }
 
   

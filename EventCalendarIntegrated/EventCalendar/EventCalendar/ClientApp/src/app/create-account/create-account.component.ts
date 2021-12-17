@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, OnInit , Inject} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { CreateAccountService } from './create-account.service';
 @Component({
   selector: 'app-create-account',
   templateUrl: './create-account.component.html',
@@ -11,29 +11,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class CreateAccountComponent implements OnInit {
 
   invalidLogin: boolean = false;
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) { }
+  role: string = "Guest";
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private createAccountService: CreateAccountService) { }
 
   ngOnInit(): void {
+    
   }
 
-
+  onChange(deviceValue)
+  {
+    console.log(deviceValue);
+    this.role = deviceValue;
+  }
   login(form:NgForm){
     console.log("UserName " + form.value['username']);
     console.log("Password " + form.value['password']);
     const param = new HttpParams()
     // .append('date', this.date.toISOString());
-    .append('UserName',form.value['username'])
-    .append('Password', form.value['password']);
-
-const body=JSON.stringify("");
-
-const header = new HttpHeaders()
-  .append(
-    'Content-Type',
-    'application/json'
-  );
-
-    this.http.post<any>(location.origin+"/api/Auth/Create", body,({headers: header, params:param}) ).subscribe(result => {
+   this.createAccountService.createAccount( form.value['username'],form.value['password'], this.role ).subscribe(result => {
 
 // const token = (<any> result).auth_token;
 // console.log("jwt token: " + result.token);

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using EventCalendar.Interfaces;
 using EventCalendar.Models;
@@ -19,22 +20,40 @@ namespace EventCalendar.Classes
         public IEnumerable<GetMonthEventsModel> GetMonthEvents(int month, int year)
         {
             //  throw new NotImplementedException();
+
             var localEvent = db.Events;
             var localEventContent = db.EventsContents;
+            
             //Switch Include to Select. 
 
             // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Include(c=>c.EventsContents).ToList();
-            List<GetMonthEventsModel> localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => new GetMonthEventsModel {Created = c.Created.Value, Title= i.Title }).ToList();
+          /*  List<GetMonthEventsModel> localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => 
+            new GetMonthEventsModel {Created = c.Created.Value, Title= i.Title }).ToList();
+          */
+
+            List <IEnumerable<GetMonthEventsModel>> localEventComplete = localEvent
+                .Where(c => c.Month == month && c.Year == year)
+                .Select(c => c.Items
+                    .Select(k => new GetMonthEventsModel { Created = c.Created.Value, Title = k.Title }))
+                .ToList();
+
+
             //  var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Select(c => new { c.Created, EventContents =  c.Items.Select(k => k.Title)}).ToList();
             // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).ToList();
+
+            
+
+
+
             foreach (var events in localEventComplete)
             {
-                Console.WriteLine("Order: order.Created");
+                
+                foreach (var localResults in events)
+                {
+                    yield return localResults;
+                }
 
-                //var comm =localComment.Find(events.EventsContents);
-
-
-                yield return events;
+                
             }
         }
 
@@ -44,33 +63,57 @@ namespace EventCalendar.Classes
             var localEventContent = db.EventsContents;
             //Switch Include to Select. 
 
+
             //  var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Include(c=>c.EventsContents).ToList();
            // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => new { c.Created, i.Title, i.Comment }).ToList();
             // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).ToList();
 
-            List<GetMonthEventContentModel> localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => new GetMonthEventContentModel { Created = c.Created.Value, Title = i.Title, Comment = i.Comment }).ToList();
+            /*
+
+            List<GetMonthEventContentModel> localEventComplete = localEvent
+                .Where(c => c.Month == month && c.Year == year)
+                .SelectMany(c => c.Items, (c, i) => new GetMonthEventContentModel { Created = c.Created.Value, Title = i.Title, Comment = i.Comment })
+                .ToList();
+            */
+
+            List<IEnumerable<GetMonthEventContentModel>> localEventComplete = localEvent
+                .Where(c => c.Month == month && c.Year == year)
+                .Select( c => c.Items.Select(k => new GetMonthEventContentModel {Created = c.Created.Value, Title = k.Title, Comment = k.Comment} ) ).ToList();
+
+
+                
 
             foreach (var events in localEventComplete)
             {
-                Console.WriteLine("Order: order.Created");
-
-                //var comm =localComment.Find(events.EventsContents);
 
 
-                yield return events;
+                foreach (var localResults in events)
+                {
+                    yield return localResults;
+                }
             }
         }
+
 
         public IEnumerable <GetMonthDayEventsModel> GetMonthDayEvents(DateTime date)
         {
 
-
-
             // var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).SelectMany(c => c.Items, (c,i) => new { c.Created, i.Title, i.Comment, i.Id });
            // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => new { c.Created, i.Title }).ToList();
+           
 
-            var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).Select(c => new GetMonthDayEventsModel { Created = c.Created.Value, Items = c.Items.Select(c => new  ItemsModel{ Title = c.Title, Comment = c.Comment, Id = c.Id }) });
-            return results;
+            List<GetMonthDayEventsModel> results = db.Events
+                .Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year)
+                .Select(c => new GetMonthDayEventsModel { Created = c.Created.Value, Items = c.Items
+                    .Select(c => new  ItemsModel{ Title = c.Title, Comment = c.Comment, Id = c.Id }) }).ToList();
+
+            foreach (var events in results)
+            {
+                
+
+
+                yield return events;
+            }
         }
 
         public void AddEvent(DateTime date, string title, string comment)
@@ -123,7 +166,6 @@ namespace EventCalendar.Classes
                 var eventContents = new EventsContents()
                 {
                     Id = uniqueId,
-                    //   CommentCreated = date,
                     Comment = comment,
                     Title = title,
                     EventId = uniqueId,
@@ -173,14 +215,16 @@ namespace EventCalendar.Classes
             var resultsEventContents = db.Events.Where(p =>
                 p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
                 p.Created.Value.Date.Year == date.Year).Select(c => c.Items).ToArray();
+
             /*
             var resultsEventContent = db.EventsContents.Where(p =>
                 p.CommentCreated.Value.Date.Day == date.Day && p.CommentCreated.Value.Date.Month == date.Month &&
                 p.CommentCreated.Value.Date.Year == date.Year).ToArray();
             */
             //var eventContents = resultsEventContent[0];
-            var events = results[0];
             //  db.EventsContents.Remove(eventContents);
+
+            var events = results[0];
 
             foreach (var item in resultsEventContents[0])
             {
@@ -200,13 +244,17 @@ namespace EventCalendar.Classes
             var resultsEventContents = db.Events.Where(p =>
                 p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
                 p.Created.Value.Date.Year == date.Year).Select(c => c.Items).ToArray();
+
             /*
             var resultsEventContent = db.EventsContents.Where(p =>
                 p.CommentCreated.Value.Date.Day == date.Day && p.CommentCreated.Value.Date.Month == date.Month &&
                 p.CommentCreated.Value.Date.Year == date.Year).ToArray();
             */
+
             //var eventContents = resultsEventContent[0];
+
             var events = results[0];
+
             //  db.EventsContents.Remove(eventContents);
 
             foreach (var item in resultsEventContents[0])
@@ -214,6 +262,7 @@ namespace EventCalendar.Classes
                 if (item.Id == id)
                 {
                     db.EventsContents.Remove(item);
+
                     //  resultsEventContents[0].Remove(item);
                 }
                 // db.EventsContents.Remove(item);
@@ -229,10 +278,10 @@ namespace EventCalendar.Classes
 
         public void EditEventItem(DateTime date, string id, string title, string comment)
         {
-            var results = db.Events.Where(p =>
+            Events[] results = db.Events.Where(p =>
                     p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
                     p.Created.Value.Date.Year == date.Year).ToArray();
-            var resultsEventContents = db.Events.Where(p =>
+            ICollection<EventsContents>[] resultsEventContents = db.Events.Where(p =>
                 p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
                 p.Created.Value.Date.Year == date.Year).Select(c => c.Items).ToArray();
 
@@ -262,6 +311,23 @@ namespace EventCalendar.Classes
         {
             DateTime todayDate = DateTime.Today;
             EditEventItem(todayDate, id, title, comment);
+        }
+
+        public IEnumerable<GetEventContentModel> GetEventContentModel(string eventId)
+        {
+
+           List<GetEventContentModel> resultsEventContents = db.EventsContents
+               .Where(c => c.Id == eventId)
+               .Select(d => new GetEventContentModel {Title = d.Title , Comment = d.Comment})
+               .ToList();
+
+
+           foreach (var item in resultsEventContents)
+           {
+               yield return item;
+           }
+
+
         }
     }
 }

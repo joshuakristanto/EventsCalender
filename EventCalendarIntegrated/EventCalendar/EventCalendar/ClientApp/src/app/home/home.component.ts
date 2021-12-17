@@ -9,7 +9,7 @@ import { ViewEventComponent } from '../view-event/view-event.component';
 import { NgbModal, ModalDismissReasons, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { HomeService } from './home.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -39,7 +39,7 @@ export class HomeComponent {
   modalOptions: NgbModalOptions;
 
   constructor(
-    private modalService: NgbModal, private http: HttpClient, private router: Router, private route: ActivatedRoute) {
+    private modalService: NgbModal, private http: HttpClient, private router: Router, private route: ActivatedRoute, private homeService: HomeService) {
     this.modalOptions = {
       backdrop: 'static',
       backdropClass: 'customBackdrop'
@@ -64,16 +64,7 @@ export class HomeComponent {
     .append('month', months)
     .append('year', years);
 
-  const body = JSON.stringify("");
-
-  const header = new HttpHeaders()
-  .append(
-    'Content-Type',
-    'application/json'
-  )
-  .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
-
-    this.http.get<any>(location.origin+"/Events/Month", ({ headers: header, params: param })).subscribe(result => {
+ this.homeService.getCalendarEvents(months,years).subscribe(result => {
 
     console.log(result.toString())
     // var output = JSON.parse(result);
@@ -131,35 +122,39 @@ export class HomeComponent {
 
   nextMonth(){
     this.currentMonth =  this.currentMonth + 1;
-    if(this.currentMonth >12 )
+    if(this.currentMonth >=12 )
     {
       this.currentMonth = 0;
       this.currentYear = this.currentYear + 1;
     }
+    console.log("Month: ", this.currentMonth + 1, this.currentYear);
     this.getCalendarEvents(this.currentMonth+1, this.currentYear );
     this.refresh.next();
   }
   pastMonth(){
-    this.currentMonth =  this.currentMonth - 1;
+    this.currentMonth = this.currentMonth - 1;
+    if (this.currentMonth < 0) {
+      this.currentMonth = 11;
+      this.currentYear = this.currentYear - 1;
+    }
+    console.log("Month: ", this.currentMonth + 1, this.currentYear);
     this.getCalendarEvents(this.currentMonth+1, this.currentYear );
     this.refresh.next();
+  }
+  activeMonth() {
+
+    this.currentMonth = new Date().getMonth();
+    this.currentYear = new Date().getFullYear();
+    console.log("Month: ", this.currentMonth + 1, this.currentYear);
+    this.getCalendarEvents(this.currentMonth+1, this.currentYear);
+    this.refresh.next();
+
   }
 
   checkLoginState() {
 
 
-    const param = new HttpParams()
-      .append('date', "this.date.toISOString()");
-
-    const body = JSON.stringify("");
-
-    const header = new HttpHeaders()
-      .append(
-        'Content-Type',
-        'application/json'
-      )
-      .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
-    this.http.get<any>(location.origin + "/Events/CheckLoginState", ({ headers: header, params: param })).subscribe(result => {
+    this.homeService.checkLoginState().subscribe(result => {
 
 
        // this.login = "Sign-Out";
@@ -172,13 +167,19 @@ export class HomeComponent {
 
 
   }
+
+  
+  
   errorResponse(error: any) {
+    console.log(error);
     console.log(error['status']);
     if (error['status'] === 401) {
       console.log("Please Login Calendar");
       this.router.navigate([`../login`], { relativeTo: this.route });
     //  this.login = "Login";
-
+    if (error['status'] === 403) {
+      alert("You do not have the rights to do this actions. Error 403 Forbidden.");
+    }
       // alert("Not currently Login. Please Login or create account to have full access.");
       // this.router.navigate([`../login`], { relativeTo: this.route });
     }

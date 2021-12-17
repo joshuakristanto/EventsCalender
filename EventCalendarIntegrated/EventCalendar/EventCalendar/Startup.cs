@@ -24,6 +24,7 @@ using EventCalendar.Identity;
 using EventCalendar.Interfaces;
 using EventCalendar.Models;
 using EventCalendar.Classes;
+using Microsoft.AspNetCore.Identity;
 
 namespace EventCalendar
 {
@@ -60,7 +61,10 @@ namespace EventCalendar
             services.AddControllers().AddNewtonsoftJson(x =>
                 x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddIdentityCore<ApplicationUser>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+                
+                
             services.AddScoped<ICalendarEvent, CalenderEventClass>();
             services.AddAuthentication(opt =>
                 {
@@ -84,6 +88,13 @@ namespace EventCalendar
                     };
 
                 });
+            /*
+            services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = Configuration["GoogleCloud:ClientId"];
+                googleOptions.ClientSecret = Configuration["GoogleCloud:ClientSecret"];
+            });
+            */
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

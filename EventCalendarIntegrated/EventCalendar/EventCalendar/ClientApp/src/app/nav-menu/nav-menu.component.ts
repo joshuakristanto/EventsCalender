@@ -10,7 +10,7 @@ import { SocialAuthService } from 'angularx-social-login';
 import { SocialUser } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
 import { timer } from 'rxjs';
-
+import { NavMenuService } from './nav-menu.service';
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',
@@ -20,7 +20,7 @@ export class NavMenuComponent {
   isExpanded = false;
   @Input() login: string = "Login";
 
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute,private authService: SocialAuthService) {
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute,private authService: SocialAuthService, private navMenuService: NavMenuService) {
 
     this.checkLoginState();
 
@@ -32,15 +32,24 @@ export class NavMenuComponent {
   toggle() {
     this.isExpanded = !this.isExpanded;
   }
-  errorResponse(error:any){
-    console.log(error['status']); 
+  
+  errorResponse(error: any) {
+    console.log(error);
+    console.log(error['status']);
     if (error['status'] === 401){
       console.log("Please Login");
       this.login ="Login";
+      // this.router.navigate([`../login`], { relativeTo: this.route });
+    //  this.login = "Login";
+
       // alert("Not currently Login. Please Login or create account to have full access.");
-     // this.router.navigate([`../login`], { relativeTo: this.route });
+      // this.router.navigate([`../login`], { relativeTo: this.route });
+    }
+    if (error['status'] === 403) {
+      alert("You do not have the rights to do this actions. Error 403 Forbidden.");
     }
   }
+
 
 
   loginDirective(){
@@ -106,19 +115,7 @@ export class NavMenuComponent {
 
   checkLoginState() {
 
-
-    const param = new HttpParams()
-    .append('date', "this.date.toISOString()");
-
-    const body = JSON.stringify("");
-
-    const header = new HttpHeaders()
-      .append(
-        'Content-Type',
-        'application/json'
-      )
-      .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
-    this.http.get<any>(location.origin+"/Events/CheckLoginState", ({ headers: header, params: param })).subscribe(result => {
+this.navMenuService.checkLoginState().subscribe(result => {
 
        
       this.login ="Sign-Out";

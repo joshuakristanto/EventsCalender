@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace EventCalendar.ViewModels
 {
-    public class GetMonthEventsModel
+    public class GetEventContentModel
     {
-        public DateTime Created { get; set; }
         public string Title { get; set; }
-       // public IEnumerable<string> Title { get; set; }
+        public string Comment { get; set; }
     }
 }
