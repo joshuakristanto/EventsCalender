@@ -43,17 +43,21 @@ export class ViewEventComponent implements OnInit {
   // }
   ngOnInit() {
 
-   this.viewEventService.fetchData(this.date).subscribe(result => {
+    this.viewEventService.fetchData(this.date).subscribe(result => {
 
       console.log("Day", result.toString());
       // var output = JSON.parse(result);
       console.log(result[0]);
-      // console.log(result[0]['eventContents']['comment']);
-      this.my_modal_content = result[0]['items']['title'];
-      this.my_modal_comment = result[0]['items']['comment'];
-      //  this.array= [{'title':result[0]['title'], 'comment': result[0]['comment'] }]; 
-      for (var item in result[0]['items']) {
-        this.array.push(result[0]['items'][item]);
+      if (result[0] !== undefined) {
+        // console.log(result[0]['eventContents']['comment']);
+        this.my_modal_content = result[0]['items']['title'];
+        this.my_modal_comment = result[0]['items']['comment'];
+        //  this.array= [{'title':result[0]['title'], 'comment': result[0]['comment'] }]; 
+        for (var item in result[0]['items']) {
+
+
+          this.array.push(result[0]['items'][item]);
+        }
       }
 
     }, error => this.errorResponse(error));
@@ -85,7 +89,7 @@ export class ViewEventComponent implements OnInit {
 
   openEditEvent(date: any, id: any) {
     const modalRef = this.modalService.open(EditEventComponent);
-    modalRef.componentInstance.id= id;
+    modalRef.componentInstance.id = id;
     modalRef.componentInstance.my_modal_title = "title";
     modalRef.componentInstance.my_modal_content = "EVENT";
     console.log("DATE" + ":" + date);
@@ -104,19 +108,22 @@ export class ViewEventComponent implements OnInit {
   }
 
   updateEvent() {
-    
+
 
     this.viewEventService.updateEvent(this.date).subscribe(result => {
-      console.log("Day", result.toString())
+      console.log("Day", result.toString());
       // var output = JSON.parse(result);
       console.log(result[0]);
-      // console.log(result[0]['eventContents']['comment']);
-      this.my_modal_content = result[0]['items']['title'];
-      this.my_modal_comment = result[0]['items']['comment'];
-      this.array = [];
-      //  this.array= [{'title':result[0]['title'], 'comment': result[0]['comment'] }]; 
-      for (var item in result[0]['items']) {
-        this.array.push(result[0]['items'][item]);
+      if (result[0] !== undefined) {
+        // console.log(result[0]['eventContents']['comment']);
+        this.my_modal_content = result[0]['items']['title'];
+        this.my_modal_comment = result[0]['items']['comment'];
+        this.array = [];
+        //  this.array= [{'title':result[0]['title'], 'comment': result[0]['comment'] }]; 
+        for (var item in result[0]['items']) {
+
+          this.array.push(result[0]['items'][item]);
+        }
       }
 
     }, error => this.errorResponse(error));
@@ -143,13 +150,13 @@ export class ViewEventComponent implements OnInit {
 
   }
 
-  deleteEventItem(date: Date,  eventID: any) {
+  deleteEventItem(date: Date, eventID: any) {
     // this.http.post<Event>("https://localhost:44382/Events/DeleteItem", params:({ date: this.date ,title: localTitle , comment:localComment })).subscribe(result => {
 
     //   }, error => console.error(error));
 
-    
-    this.viewEventService.deleteEventItem(date,eventID).subscribe(result => {
+
+    this.viewEventService.deleteEventItem(date, eventID).subscribe(result => {
       this.updateEvent();
       this.update.emit({ update: "Update" });
 
@@ -167,7 +174,7 @@ export class ViewEventComponent implements OnInit {
     if (error['status'] === 401) {
       console.log("Please Login Calendar");
       // this.router.navigate([`../login`], { relativeTo: this.route });
-    //  this.login = "Login";
+      //  this.login = "Login";
 
       // alert("Not currently Login. Please Login or create account to have full access.");
       // this.router.navigate([`../login`], { relativeTo: this.route });
@@ -177,7 +184,7 @@ export class ViewEventComponent implements OnInit {
     }
   }
 
-  
+
 
 }
 
