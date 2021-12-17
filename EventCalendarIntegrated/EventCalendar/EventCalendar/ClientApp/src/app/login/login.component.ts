@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SocialAuthService } from 'angularx-social-login';
 import { SocialUser } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
-
+import { LoginService } from './login.service';
 
 @Component({
   selector: 'app-login',
@@ -17,13 +17,13 @@ export class LoginComponent implements OnInit {
 
   invalidLogin: boolean = false;
   user: SocialUser | null;
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private authService: SocialAuthService) {
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private authService: SocialAuthService, private loginService: LoginService) {
 
     this.user = null;
     this.authService.authState.subscribe((user: SocialUser) => {
       // console.log(user);
       if (user) {
-        this.http.post<any>(location.origin + "/api/Auth/GoogleAuthenticate", { idToken: user.idToken }).subscribe((result: any) => {
+        this.loginService.googleAuthenticate(user).subscribe((result: any) => {
           const token = (<any>result).auth_token;
           console.log("jwt token: " + result.token);
           localStorage.setItem('jwt', result.token);
@@ -54,20 +54,8 @@ export class LoginComponent implements OnInit {
   login(form: NgForm) {
     console.log("UserName " + form.value['username']);
     console.log("Password " + form.value['password']);
-    const param = new HttpParams()
-      // .append('date', this.date.toISOString());
-      .append('UserName', form.value['username'])
-      .append('Password', form.value['password']);
-
-    const body = JSON.stringify("");
-
-    const header = new HttpHeaders()
-      .append(
-        'Content-Type',
-        'application/json'
-      );
-
-    this.http.post<any>(location.origin + "/api/Auth/Login", body, ({ headers: header, params: param })).subscribe(result => {
+    
+    this.loginService.login( form.value['username'], form.value['password']).subscribe(result => {
 
       const token = (<any>result).auth_token;
       console.log("jwt token: " + result.token);

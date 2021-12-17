@@ -10,7 +10,7 @@ import { SocialAuthService } from 'angularx-social-login';
 import { SocialUser } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
 import { timer } from 'rxjs';
-
+import { NavMenuService } from './nav-menu.service';
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',
@@ -20,7 +20,7 @@ export class NavMenuComponent {
   isExpanded = false;
   @Input() login: string = "Login";
 
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute,private authService: SocialAuthService) {
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute,private authService: SocialAuthService, private navMenuService: NavMenuService) {
 
     this.checkLoginState();
 
@@ -115,19 +115,7 @@ export class NavMenuComponent {
 
   checkLoginState() {
 
-
-    const param = new HttpParams()
-    .append('date', "this.date.toISOString()");
-
-    const body = JSON.stringify("");
-
-    const header = new HttpHeaders()
-      .append(
-        'Content-Type',
-        'application/json'
-      )
-      .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
-    this.http.get<any>(location.origin+"/Events/CheckLoginState", ({ headers: header, params: param })).subscribe(result => {
+this.navMenuService.checkLoginState().subscribe(result => {
 
        
       this.login ="Sign-Out";

@@ -81,7 +81,7 @@ export class ViewEventService {
         'Content-Type',
         'application/json'
       )
-      .append('Author ization', `Bearer ${token}`);
+      .append('Authorization', `Bearer ${token}`);
     return this.http.post<Event>(location.origin + "/Events/DeleteItem", body, ({ headers: header, params: param }));
     //this.activeModal.close("Close click");
   }

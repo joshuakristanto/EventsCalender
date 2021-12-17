@@ -9,7 +9,7 @@ import { ViewEventComponent } from '../view-event/view-event.component';
 import { NgbModal, ModalDismissReasons, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { HomeService } from './home.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -39,7 +39,7 @@ export class HomeComponent {
   modalOptions: NgbModalOptions;
 
   constructor(
-    private modalService: NgbModal, private http: HttpClient, private router: Router, private route: ActivatedRoute) {
+    private modalService: NgbModal, private http: HttpClient, private router: Router, private route: ActivatedRoute, private homeService: HomeService) {
     this.modalOptions = {
       backdrop: 'static',
       backdropClass: 'customBackdrop'
@@ -64,16 +64,7 @@ export class HomeComponent {
     .append('month', months)
     .append('year', years);
 
-  const body = JSON.stringify("");
-
-  const header = new HttpHeaders()
-  .append(
-    'Content-Type',
-    'application/json'
-  )
-  .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
-
-    this.http.get<any>(location.origin+"/Events/Month", ({ headers: header, params: param })).subscribe(result => {
+ this.homeService.getCalendarEvents(months,years).subscribe(result => {
 
     console.log(result.toString())
     // var output = JSON.parse(result);
@@ -163,18 +154,7 @@ export class HomeComponent {
   checkLoginState() {
 
 
-    const param = new HttpParams()
-      .append('date', "this.date.toISOString()");
-
-    const body = JSON.stringify("");
-
-    const header = new HttpHeaders()
-      .append(
-        'Content-Type',
-        'application/json'
-      )
-      .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
-    this.http.get<any>(location.origin + "/Events/CheckLoginState", ({ headers: header, params: param })).subscribe(result => {
+    this.homeService.checkLoginState().subscribe(result => {
 
 
        // this.login = "Sign-Out";

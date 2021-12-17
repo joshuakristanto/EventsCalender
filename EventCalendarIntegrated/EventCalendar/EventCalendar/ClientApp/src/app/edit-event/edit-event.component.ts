@@ -6,7 +6,7 @@ import { FormBuilder } from '@angular/forms';
 import { stringify } from '@angular/compiler/src/util';
 import { ViewEventComponent } from '../view-event/view-event.component';
 import { Inject } from '@angular/core';
-
+import { EditEventsService } from './edit-events.service';
 @Component({
   selector: 'app-edit-event',
   templateUrl: './edit-event.component.html',
@@ -30,7 +30,7 @@ export class EditEventComponent implements OnInit {
 
 
 
-  constructor(public activeModal: NgbActiveModal, private http: HttpClient, private modalService: NgbModal) {
+  constructor(public activeModal: NgbActiveModal, private http: HttpClient, private modalService: NgbModal, private editEventService : EditEventsService) {
 
     this.modalOptions = {
       backdrop: 'static',
@@ -51,22 +51,7 @@ export class EditEventComponent implements OnInit {
 
     //   }, error => console.error(error));
 
-    const param = new HttpParams()
-      .append('date', date.toISOString())
-      .append('title', localTitle)
-      .append('comment', localComment)
-      .append('id', this.id);
-
-    const body = JSON.stringify("");
-
-    const header = new HttpHeaders()
-      .append(
-        'Content-Type',
-        'application/json'
-      )
-      .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
-
-    this.http.post<Event>(location.origin + "/Events/EditItem", body, ({ headers: header, params: param })).subscribe(result => {
+    this.editEventService.addEvent(date,localTitle,localComment,this.id).subscribe(result => {
       this.update.emit({ update: "Update" });
     }, error => this.errorResponse(error));
 
@@ -81,20 +66,7 @@ export class EditEventComponent implements OnInit {
   fetchData() {
 
     console.log("ID", this.id);
-    const param = new HttpParams()
-
-      .append('id', this.id);
-
-    const body = JSON.stringify("");
-
-    const header = new HttpHeaders()
-      .append(
-        'Content-Type',
-        'application/json'
-      )
-      .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
-
-    this.http.get<EventFetch>(location.origin + "/Events/EventContent", ({ headers: header, params: param })).subscribe(result => {
+    this.editEventService.fetchData(this.id).subscribe(result => {
       // this.update.emit({ update: "Update" });
       console.log("TITLE", result);
       this.titleModal = result[0]["title"];
@@ -121,21 +93,7 @@ export class EditEventComponent implements OnInit {
       December
     }
 
-    const param = new HttpParams()
-      .append('date', this.date.toISOString());
-
-    const body = JSON.stringify("");
-
-    const header = new HttpHeaders()
-      .append(
-        'Content-Type',
-        'application/json'
-      )
-      .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
-
-
-
-    this.http.get<any>(location.origin + "/Events/Day", ({ headers: header, params: param })).subscribe(result => {
+    this.editEventService.updateEvent(this.date).subscribe(result => {
 
       console.log(result.toString())
       // var output = JSON.parse(result);

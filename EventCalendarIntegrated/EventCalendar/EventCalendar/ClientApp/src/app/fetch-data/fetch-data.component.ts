@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-
+import { FetchDataService } from './fetch-data.service';
 @Component({
   selector: 'app-fetch-data',
   templateUrl: './fetch-data.component.html'
@@ -8,25 +8,12 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 export class FetchDataComponent {
   public forecasts: WeatherForecast[] = [];
 
-  constructor(http: HttpClient) {
+  constructor(http: HttpClient, private fetchDataService: FetchDataService) {
 
     // const param = new HttpParams()
     // .append('date', date.toISOString());
 
-const body=JSON.stringify("");
-
-let token = localStorage.getItem('jwt');
-const header = new HttpHeaders()
-.append(
-  'Content-Type',
-  'application/json'
-)
-.append ('Authorization', `Bearer ${token}`);
-
-    http.get<WeatherForecast[]>(location.origin+"/WeatherForecast", { headers:{
-      'Authorization' : `Bearer ${token}`
-    }
-  }).subscribe(result => {
+this.fetchDataService.fetchData().subscribe(result => {
       this.forecasts = result;
     }, error => console.error(error));
   }
