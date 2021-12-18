@@ -35,10 +35,10 @@ namespace EventCalendar.Controllers
             _calendarDb = calendarDb;
         }
 
-    
 
 
-        [Authorize]
+
+        [Authorize(Roles = "Admin,Guest")]
         [Route("Month")]
         [HttpGet]
         public IEnumerable GetMonthEvents( int month, int year)
@@ -48,7 +48,7 @@ namespace EventCalendar.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "Admin,Guest")]
         [Route("MonthComments")]
         [HttpGet]
         public IEnumerable GetMonthEventContents(int month, int year)
@@ -58,7 +58,7 @@ namespace EventCalendar.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "Admin,Guest")]
         [Route("Day")]
         [HttpGet]
         public IEnumerable GetMonthDayEvents( DateTime date)
@@ -68,7 +68,7 @@ namespace EventCalendar.Controllers
 
 
 
-        [Authorize]
+        [Authorize(Roles = "Admin,Guest")]
         [Route("EventContent")]
         [HttpGet]
         public IEnumerable GetEventContent(string id)
@@ -76,7 +76,7 @@ namespace EventCalendar.Controllers
             return _calendarDb.GetEventContentModel(id);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin,Guest")]
         [Route("Test")]
         [HttpGet]
         public IEnumerable Test(DateTime date)

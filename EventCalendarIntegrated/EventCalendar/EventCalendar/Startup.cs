@@ -66,7 +66,8 @@ namespace EventCalendar
                 
                 
             services.AddScoped<ICalendarEvent, CalenderEventClass>();
-            services.AddAuthentication(opt =>
+            services.AddScoped<IAuthentication, AuthenticationClass>();
+             services.AddAuthentication(opt =>
                 {
                     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
