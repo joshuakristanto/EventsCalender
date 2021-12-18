@@ -20,9 +20,14 @@ namespace EventCalendar.Models
         public string Id { get; set; }
 
       //  [ForeignKey("Created")]
-       // public DateTime? CommentCreated { get; set; }
+       public DateTime DateCreated { get; set; }
 
-        
+       public int Year { get; set; }
+
+       public int Month { get; set; }
+
+       public int Day { get; set; }
+
         public string? EventId { get; set; }
         [ForeignKey("EventId")]
         public virtual Events Events { get; set; }

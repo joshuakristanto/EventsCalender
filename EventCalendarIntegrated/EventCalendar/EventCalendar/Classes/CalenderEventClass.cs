@@ -110,7 +110,7 @@ namespace EventCalendar.Classes
                 {
                     Created = c.Created.Value,
                     Items = c.Items
-                    .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id })
+                    .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id, Date = c.DateCreated })
                 }).ToList();
 
             foreach (var events in results)
@@ -133,6 +133,7 @@ namespace EventCalendar.Classes
             int monthDate = date.Month;
             int yearDate = date.Year;
 
+            DateTime dateEventContent = DateTime.Now;
 
             var eventDb = db.Events;
             ICollection<EventsContents>[] dbContent = eventDb.Where(c => c.Created == date).Select(c => c.Items).ToArray();
@@ -147,6 +148,10 @@ namespace EventCalendar.Classes
                     Comment = comment,
                     Title = title,
                     EventId = uniqueId,
+                    DateCreated = dateEventContent,
+                    Month = dateEventContent.Month,
+                    Day = dateEventContent.Day,
+                    Year = dateEventContent.Year,
                     Events = eventLocal[0],
 
                 };

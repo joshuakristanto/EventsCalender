@@ -73,7 +73,7 @@ namespace EventCalendar.UnitTesting
                 {
                     Created = c.Created.Value,
                     Items = c.Items
-                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id })
+                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id, Date = c.DateCreated})
                 }).ToList();
 
             TestContext.WriteLine("Message..." + results[0].Created);
@@ -105,13 +105,13 @@ namespace EventCalendar.UnitTesting
                 {
                     Created = c.Created.Value,
                     Items = c.Items
-                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id })
+                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id, Date = c.DateCreated})
                 }).ToList();
 
 
 
             List<ItemsModel> id = results[0].Items
-                .Select(c => new ItemsModel() { Id = c.Id, Title = c.Title, Comment = c.Comment })
+                .Select(c => new ItemsModel() { Id = c.Id, Title = c.Title, Comment = c.Comment, Date = c.Date})
                 .ToList();
 
 
@@ -129,12 +129,12 @@ namespace EventCalendar.UnitTesting
                 {
                     Created = c.Created.Value,
                     Items = c.Items
-                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id })
+                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id , Date = c.DateCreated})
                 }).ToList();
 
 
             id = results[0].Items
-                .Select(c => new ItemsModel() { Id = c.Id, Title = c.Title, Comment = c.Comment })
+                .Select(c => new ItemsModel() { Id = c.Id, Title = c.Title, Comment = c.Comment, Date = c.Date})
                 .ToList();
 
 
@@ -171,7 +171,7 @@ namespace EventCalendar.UnitTesting
                 {
                     Created = c.Created.Value,
                     Items = c.Items
-                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id })
+                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id , Date = c.DateCreated})
                 }).ToList();
 
 
@@ -205,12 +205,12 @@ namespace EventCalendar.UnitTesting
                 {
                     Created = c.Created.Value,
                     Items = c.Items
-                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id })
+                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id , Date = c.DateCreated})
                 }).ToList();
 
 
             var id = results[0].Items
-                .Select(c => new ItemsModel() { Id = c.Id, Title = c.Title, Comment = c.Comment })
+                .Select(c => new ItemsModel() { Id = c.Id, Title = c.Title, Comment = c.Comment, Date = c.Date})
                 .ToList();
 
 
@@ -223,13 +223,13 @@ namespace EventCalendar.UnitTesting
                 {
                     Created = c.Created.Value,
                     Items = c.Items
-                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id })
+                        .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id, Date = c.DateCreated})
                 }).ToList();
 
 
 
             id = results[0].Items
-                .Select(c => new ItemsModel() { Id = c.Id, Title = c.Title, Comment = c.Comment })
+                .Select(c => new ItemsModel() { Id = c.Id, Title = c.Title, Comment = c.Comment , Date = c.Date})
                 .ToList();
 
             TestContext.WriteLine("Message..." + results.Count);
