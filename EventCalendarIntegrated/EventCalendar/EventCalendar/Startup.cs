@@ -63,32 +63,32 @@ namespace EventCalendar
             services.AddIdentityCore<ApplicationUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-                
-                
+
+
             services.AddScoped<ICalendarEvent, CalenderEventClass>();
             services.AddScoped<IAuthentication, AuthenticationClass>();
-             services.AddAuthentication(opt =>
-                {
-                    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(opt =>
-                {
-                    opt.TokenValidationParameters = new()
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        RequireExpirationTime = true,
-                        LifetimeValidator = LifetimeValidator,
-                        ValidIssuer = "https://www.eventcalendar-2.azurewebsites.net",
-                        ValidAudience = "https://www.eventcalendar-2.azurewebsites.net",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("CSUN590@8:59PM#cretKey"))
+            services.AddAuthentication(opt =>
+               {
+                   opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                   opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+               })
+               .AddJwtBearer(opt =>
+               {
+                   opt.TokenValidationParameters = new()
+                   {
+                       ValidateIssuer = true,
+                       ValidateAudience = true,
+                       ValidateLifetime = true,
+                       ValidateIssuerSigningKey = true,
+                       RequireExpirationTime = true,
+                       LifetimeValidator = LifetimeValidator,
+                       ValidIssuer = "https://www.eventcalendar-2.azurewebsites.net",
+                       ValidAudience = "https://www.eventcalendar-2.azurewebsites.net",
+                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("CSUN590@8:59PM#cretKey"))
 
-                    };
+                   };
 
-                });
+               });
             /*
             services.AddAuthentication().AddGoogle(googleOptions =>
             {
@@ -125,7 +125,7 @@ namespace EventCalendar
 
             app.UseRouting();
             app.UseHttpsRedirection();
-            
+
 
             app.UseAuthentication();
 

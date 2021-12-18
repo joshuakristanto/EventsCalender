@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,15 +24,15 @@ namespace EventCalendar.Classes
 
             DbSet<Events> localEvent = db.Events;
             DbSet<EventsContents> localEventContent = db.EventsContents;
-            
+
             //Switch Include to Select. 
 
             // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Include(c=>c.EventsContents).ToList();
-          /*  List<GetMonthEventsModel> localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => 
-            new GetMonthEventsModel {Created = c.Created.Value, Title= i.Title }).ToList();
-          */
+            /*  List<GetMonthEventsModel> localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => 
+              new GetMonthEventsModel {Created = c.Created.Value, Title= i.Title }).ToList();
+            */
 
-            List <IEnumerable<GetMonthEventsModel>> localEventComplete = localEvent
+            List<IEnumerable<GetMonthEventsModel>> localEventComplete = localEvent
                 .Where(c => c.Month == month && c.Year == year)
                 .Select(c => c.Items
                     .Select(k => new GetMonthEventsModel { Created = c.Created.Value, Title = k.Title }))
@@ -42,23 +42,23 @@ namespace EventCalendar.Classes
             //  var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Select(c => new { c.Created, EventContents =  c.Items.Select(k => k.Title)}).ToList();
             // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).ToList();
 
-            
+
 
 
 
             foreach (var events in localEventComplete)
             {
-                
+
                 foreach (var localResults in events)
                 {
                     yield return localResults;
                 }
 
-                
+
             }
         }
 
-        public IEnumerable <GetMonthEventContentModel> GetMonthEventContents(int month, int year)
+        public IEnumerable<GetMonthEventContentModel> GetMonthEventContents(int month, int year)
         {
             DbSet<Events> localEvent = db.Events;
             DbSet<EventsContents> localEventContent = db.EventsContents;
@@ -80,10 +80,10 @@ namespace EventCalendar.Classes
 
             List<IEnumerable<GetMonthEventContentModel>> localEventComplete = localEvent
                 .Where(c => c.Month == month && c.Year == year)
-                .Select( c => c.Items.Select(k => new GetMonthEventContentModel {Created = c.Created.Value, Title = k.Title, Comment = k.Comment} ) ).ToList();
+                .Select(c => c.Items.Select(k => new GetMonthEventContentModel { Created = c.Created.Value, Title = k.Title, Comment = k.Comment })).ToList();
 
 
-                
+
 
             foreach (var events in localEventComplete)
             {
@@ -97,21 +97,25 @@ namespace EventCalendar.Classes
         }
 
 
-        public IEnumerable <GetMonthDayEventsModel> GetMonthDayEvents(DateTime date)
+        public IEnumerable<GetMonthDayEventsModel> GetMonthDayEvents(DateTime date)
         {
 
             // var results = db.Events.Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year).SelectMany(c => c.Items, (c,i) => new { c.Created, i.Title, i.Comment, i.Id });
-           // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => new { c.Created, i.Title }).ToList();
-           
+            // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => new { c.Created, i.Title }).ToList();
+
 
             List<GetMonthDayEventsModel> results = db.Events
                 .Where(p => p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month && p.Created.Value.Date.Year == date.Year)
-                .Select(c => new GetMonthDayEventsModel { Created = c.Created.Value, Items = c.Items
-                    .Select(c => new  ItemsModel{ Title = c.Title, Comment = c.Comment, Id = c.Id }) }).ToList();
+                .Select(c => new GetMonthDayEventsModel
+                {
+                    Created = c.Created.Value,
+                    Items = c.Items
+                    .Select(c => new ItemsModel { Title = c.Title, Comment = c.Comment, Id = c.Id })
+                }).ToList();
 
             foreach (var events in results)
             {
-                
+
 
 
                 yield return events;
@@ -125,9 +129,9 @@ namespace EventCalendar.Classes
             var uniqueId = ans.ToString("x");
 
 
-             int dayDate = date.Day;
-             int monthDate = date.Month;
-             int yearDate = date.Year;
+            int dayDate = date.Day;
+            int monthDate = date.Month;
+            int yearDate = date.Year;
 
 
             var eventDb = db.Events;
@@ -318,16 +322,16 @@ namespace EventCalendar.Classes
         public IEnumerable<GetEventContentModel> GetEventContentModel(string eventId)
         {
 
-           List<GetEventContentModel> resultsEventContents = db.EventsContents
-               .Where(c => c.Id == eventId)
-               .Select(d => new GetEventContentModel {Title = d.Title , Comment = d.Comment})
-               .ToList();
+            List<GetEventContentModel> resultsEventContents = db.EventsContents
+                .Where(c => c.Id == eventId)
+                .Select(d => new GetEventContentModel { Title = d.Title, Comment = d.Comment })
+                .ToList();
 
 
-           foreach (var item in resultsEventContents)
-           {
-               yield return item;
-           }
+            foreach (var item in resultsEventContents)
+            {
+                yield return item;
+            }
 
 
         }

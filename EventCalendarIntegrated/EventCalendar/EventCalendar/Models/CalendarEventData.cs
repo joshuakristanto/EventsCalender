@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,13 +22,13 @@ namespace EventCalendar.Models
 
         public CalendarEventData(DbContextOptions<CalendarEventData> options) : base(options) { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-           {
-           //   optionsBuilder.UseSqlite("Data Source=database.db");
-           // optionsBuilder.UseLazyLoadingProxies().UseSqlite("Data Source=database.db");
+        {
+            //   optionsBuilder.UseSqlite("Data Source=database.db");
+            // optionsBuilder.UseLazyLoadingProxies().UseSqlite("Data Source=database.db");
 
         }
-           protected override void OnModelCreating(ModelBuilder modelBuilder)
-           {
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
             /* modelBuilder.Entity<EventsContents>()
                  .HasOne(b => b.Events)
                  .WithMany(b => b.Items)

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,7 +25,7 @@ namespace EventCalendar.Controllers
 
         private CalendarEventData _eventData;
         private ICalendarEvent _calendarDb;
-       
+
         private readonly ILogger<EventsController> _logger;
 
         public EventsController(ILogger<EventsController> logger, CalendarEventData eventData, ICalendarEvent calendarDb)
@@ -41,7 +41,7 @@ namespace EventCalendar.Controllers
         [Authorize(Roles = "Admin,Guest")]
         [Route("Month")]
         [HttpGet]
-        public IEnumerable GetMonthEvents( int month, int year)
+        public IEnumerable GetMonthEvents(int month, int year)
         {
             return _calendarDb.GetMonthEvents(month, year);
 
@@ -61,7 +61,7 @@ namespace EventCalendar.Controllers
         [Authorize(Roles = "Admin,Guest")]
         [Route("Day")]
         [HttpGet]
-        public IEnumerable GetMonthDayEvents( DateTime date)
+        public IEnumerable GetMonthDayEvents(DateTime date)
         {
             return _calendarDb.GetMonthDayEvents(date);
         }
@@ -82,9 +82,9 @@ namespace EventCalendar.Controllers
         public IEnumerable Test(DateTime date)
         {
             var db = _eventData;
-                
-           var results = db.EventsContents.Where(c => c.Events.Created == date);
-           
+
+            var results = db.EventsContents.Where(c => c.Events.Created == date);
+
             // var results = db.Events.Where(c => c.Created == date);
 
             //   var results2 = db.Events.Single(c => c.Created == date.);
@@ -96,18 +96,18 @@ namespace EventCalendar.Controllers
         [Route("Add")]
         [HttpPost]
         public IActionResult AddEvent(DateTime date, string title, string comment)
-        { 
+        {
             _calendarDb.AddEvent(date, title, comment);
-         return Ok();
+            return Ok();
         }
 
 
         [Authorize(Roles = "Admin")]
         [Route("AddToday")]
         [HttpPost]
-        public IActionResult AddEventToday( string title, string comment)
+        public IActionResult AddEventToday(string title, string comment)
         {
-            _calendarDb.AddEventToday( title, comment);
+            _calendarDb.AddEventToday(title, comment);
             return Ok();
         }
 
@@ -148,7 +148,7 @@ namespace EventCalendar.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteEventItem(DateTime date, string id)
         {
-            _calendarDb.DeleteEventItem( date,id);
+            _calendarDb.DeleteEventItem(date, id);
 
 
             return Ok();
@@ -160,7 +160,7 @@ namespace EventCalendar.Controllers
         [HttpPost]
         public async Task<IActionResult> EditEventItem(DateTime date, string id, string title, string comment)
         {
-            _calendarDb.EditEventItem(date,id,title,comment);
+            _calendarDb.EditEventItem(date, id, title, comment);
 
             return Ok();
         }
@@ -169,9 +169,9 @@ namespace EventCalendar.Controllers
         [Authorize(Roles = "Admin")]
         [Route("EditItemToday")]
         [HttpPost]
-        public async Task<IActionResult> EditEventItemToday( string id, string title, string comment)
+        public async Task<IActionResult> EditEventItemToday(string id, string title, string comment)
         {
-            _calendarDb.EditEventItemToday( id, title, comment);
+            _calendarDb.EditEventItemToday(id, title, comment);
 
             return Ok();
         }

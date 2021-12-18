@@ -26,9 +26,9 @@ namespace EventCalendar.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
 
         private readonly RoleManager<IdentityRole> _roleManager;
-       // private readonly SignInManager<IdentityUser> _signInManager;
-       private readonly IConfiguration _configuration;
-       private readonly IAuthentication _auth;
+        // private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IConfiguration _configuration;
+        private readonly IAuthentication _auth;
         public AuthController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IAuthentication auth)
         {
             _userManager = userManager;
@@ -51,7 +51,7 @@ namespace EventCalendar.Controllers
         public IActionResult Authenticate([FromBody] AuthenticateRequest data)
         {
             GoogleJsonWebSignature.ValidationSettings settings = new GoogleJsonWebSignature.ValidationSettings();
-            
+
             // Change this to your google client ID
             settings.Audience = new List<string>() { _configuration["GoogleCloud:ClientId"] };
 
@@ -69,7 +69,7 @@ namespace EventCalendar.Controllers
 
                 //  var resultTrue = await _signInManager.PasswordSignInAsync(UserName, Password, false, false);
 
-            
+
 
 
                 return Ok(new { Token = tokenString });
@@ -78,9 +78,9 @@ namespace EventCalendar.Controllers
             {
                 return NotFound();
             }
-          
-            
-         
+
+
+
         }
 
 
@@ -99,32 +99,32 @@ namespace EventCalendar.Controllers
 
             var result = await _userManager.CheckPasswordAsync(user, Password);
 
-            
+
 
 
             if (!result)
             {
-             //   return Ok(new { result = false });
+                //   return Ok(new { result = false });
                 return NotFound();
             }
-          
+
             var role = "Guest";
             var guestRoleResult = await _userManager.IsInRoleAsync(user, "Guest");
-            if (guestRoleResult )
+            if (guestRoleResult)
             {
-             
-              role = "Guest";
+
+                role = "Guest";
             }
 
             var adminRoleResult = await _userManager.IsInRoleAsync(user, "Admin");
             if (adminRoleResult)
             {
-         
 
-             role = "Admin";
+
+                role = "Admin";
             }
-            
-           
+
+
             var tokenString = _auth.GenerateToken(role);
             return Ok(new { Token = tokenString });
 
@@ -138,12 +138,12 @@ namespace EventCalendar.Controllers
 
         public async Task<IActionResult> Create(string UserName, string Password, string Role)
         {
-            
+
             if (Role == null)
             {
                 Role = "guest";
             }
-            
+
             ApplicationUser user = new()
             {
                 UserName = UserName,
