@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Collections;
+using EventCalendar.Interfaces;
 using EventCalendar.ViewModels;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 
@@ -33,6 +34,9 @@ namespace EventCalendar.UnitTesting
         // private CalendarEventData eventData =
         //     new CalendarEventData(options => options.UseSqlite("ConnectionStrings:EventDatabase"));
 
+
+        
+      
         public TestContext TestContext
         {
             get { return testContextInstance; }
@@ -42,7 +46,7 @@ namespace EventCalendar.UnitTesting
         [TestMethod]
         public void AddEventTest()
         {
-
+          
             var optionsBuilder = new DbContextOptionsBuilder<CalendarEventData>()
                 .UseInMemoryDatabase(databaseName: "EventCalendar").Options;
 

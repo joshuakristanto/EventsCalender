@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using EventCalendar.Interfaces;
 using EventCalendar.Models;
 using EventCalendar.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventCalendar.Classes
 {
@@ -21,8 +22,8 @@ namespace EventCalendar.Classes
         {
             //  throw new NotImplementedException();
 
-            var localEvent = db.Events;
-            var localEventContent = db.EventsContents;
+            DbSet<Events> localEvent = db.Events;
+            DbSet<EventsContents> localEventContent = db.EventsContents;
             
             //Switch Include to Select. 
 
@@ -59,13 +60,14 @@ namespace EventCalendar.Classes
 
         public IEnumerable <GetMonthEventContentModel> GetMonthEventContents(int month, int year)
         {
-            var localEvent = db.Events;
-            var localEventContent = db.EventsContents;
+            DbSet<Events> localEvent = db.Events;
+            DbSet<EventsContents> localEventContent = db.EventsContents;
+
             //Switch Include to Select. 
 
 
             //  var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).Include(c=>c.EventsContents).ToList();
-           // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => new { c.Created, i.Title, i.Comment }).ToList();
+            // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).SelectMany(c => c.Items, (c, i) => new { c.Created, i.Title, i.Comment }).ToList();
             // var localEventComplete = localEvent.Where(c => c.Month == month && c.Year == year).ToList();
 
             /*
@@ -209,10 +211,10 @@ namespace EventCalendar.Classes
 
         public void DeleteEvent(DateTime date)
         {
-            var results = db.Events.Where(p =>
+            Events[] results = db.Events.Where(p =>
                 p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
                 p.Created.Value.Date.Year == date.Year).ToArray();
-            var resultsEventContents = db.Events.Where(p =>
+            ICollection<EventsContents>[] resultsEventContents = db.Events.Where(p =>
                 p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
                 p.Created.Value.Date.Year == date.Year).Select(c => c.Items).ToArray();
 
@@ -238,10 +240,10 @@ namespace EventCalendar.Classes
 
         public void DeleteEventItem(DateTime date, string id)
         {
-            var results = db.Events.Where(p =>
+            Events[] results = db.Events.Where(p =>
                 p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
                 p.Created.Value.Date.Year == date.Year).ToArray();
-            var resultsEventContents = db.Events.Where(p =>
+            ICollection<EventsContents>[] resultsEventContents = db.Events.Where(p =>
                 p.Created.Value.Date.Day == date.Day && p.Created.Value.Date.Month == date.Month &&
                 p.Created.Value.Date.Year == date.Year).Select(c => c.Items).ToArray();
 
