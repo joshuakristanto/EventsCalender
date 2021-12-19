@@ -7,6 +7,7 @@ import { NgbModal, ModalDismissReasons, NgbModalOptions } from '@ng-bootstrap/ng
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { EditEventComponent } from '../edit-event/edit-event.component';
 import { ViewEventService } from './view-event.service';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-view-event',
   templateUrl: './view-event.component.html',
@@ -22,7 +23,7 @@ export class ViewEventComponent implements OnInit {
   @Output() update = new EventEmitter<any>();
   modalOptions: NgbModalOptions;
 
-  constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, private http: HttpClient, private viewEventService: ViewEventService) {
+  constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, private http: HttpClient, private viewEventService: ViewEventService, private router: Router, private route: ActivatedRoute) {
 
     this.modalOptions = {
       backdrop: 'static',
@@ -173,7 +174,9 @@ export class ViewEventComponent implements OnInit {
     console.log(error['status']);
     if (error['status'] === 401) {
       console.log("Please Login Calendar");
-      // this.router.navigate([`../login`], { relativeTo: this.route });
+      this.router.navigate([`../login`], { relativeTo: this.route });
+      
+      alert("Not currently Login. Please Login or create account to have full access.");
       //  this.login = "Login";
 
       // alert("Not currently Login. Please Login or create account to have full access.");

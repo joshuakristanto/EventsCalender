@@ -133,7 +133,7 @@ namespace EventCalendar.Classes
             int monthDate = date.Month;
             int yearDate = date.Year;
 
-            DateTime dateEventContent = DateTime.Now;
+            DateTime dateEventContent = DateTime.UtcNow;
 
             var eventDb = db.Events;
             ICollection<EventsContents>[] dbContent = eventDb.Where(c => c.Created == date).Select(c => c.Items).ToArray();
@@ -180,6 +180,10 @@ namespace EventCalendar.Classes
                     Comment = comment,
                     Title = title,
                     EventId = uniqueId,
+                    DateCreated = dateEventContent,
+                    Month = dateEventContent.Month,
+                    Day = dateEventContent.Day,
+                    Year = dateEventContent.Year,
                     Events = events,
 
                 };
@@ -199,21 +203,21 @@ namespace EventCalendar.Classes
 
         public void AddEventToday(string title, string comment)
         {
-            DateTime todayDate = DateTime.Today;
+            DateTime todayDate = DateTime.UtcNow;
             AddEvent(todayDate, title, comment);
 
         }
 
         public void DeleteToday()
         {
-            DateTime todayDate = DateTime.Today;
+            DateTime todayDate = DateTime.UtcNow;
             DeleteEvent(todayDate);
 
         }
 
         public void DeleteTodayEventItem(string id)
         {
-            DateTime todayDate = DateTime.Today;
+            DateTime todayDate = DateTime.UtcNow;
             DeleteEventItem(todayDate, id);
 
         }
