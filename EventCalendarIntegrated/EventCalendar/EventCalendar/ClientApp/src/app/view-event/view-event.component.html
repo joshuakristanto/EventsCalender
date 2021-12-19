@@ -13,18 +13,15 @@
   <div class="modal-body" style="text-align: center;">
   
   <table *ngFor="let item of array"class="modal-body" style="text-align: center; margin-left:auto;margin-right:auto;">
-    <td style="text-align: center; padding-top: 25%;">
+    <td style="text-align: center; padding-top: 5%;">
       <button type="button" class="btn btn-outline-dark" style="background-color: red; color: white;" (click)="deleteEventItem( date, item?.id)">Delete</button>
       <button type="button" class="btn btn-outline-dark" style="background-color: green; color: white;" (click)="openEditEvent( date, item?.id)">Edit</button>
-      
     
-     
-     
       
       <!--deleteEventItem( date , {{item?.id }})-->
     </td>
-    <tr>  Date Created {{item?.date}}</tr>
-    <tr> {{item?.title }}</tr>
+    <tr>  Date Created: {{item?.date}} (UTC)</tr>
+    <tr> {{item?.title }}</tr>  
     <tr style="text-align: center;">
       {{item?.comment}}
 

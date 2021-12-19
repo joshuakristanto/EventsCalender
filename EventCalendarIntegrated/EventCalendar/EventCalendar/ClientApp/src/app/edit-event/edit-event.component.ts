@@ -7,6 +7,7 @@ import { stringify } from '@angular/compiler/src/util';
 import { ViewEventComponent } from '../view-event/view-event.component';
 import { Inject } from '@angular/core';
 import { EditEventsService } from './edit-events.service';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-edit-event',
   templateUrl: './edit-event.component.html',
@@ -30,7 +31,7 @@ export class EditEventComponent implements OnInit {
 
 
 
-  constructor(public activeModal: NgbActiveModal, private http: HttpClient, private modalService: NgbModal, private editEventService : EditEventsService) {
+  constructor(public activeModal: NgbActiveModal, private http: HttpClient, private modalService: NgbModal, private editEventService : EditEventsService,private router: Router, private route: ActivatedRoute) {
 
     this.modalOptions = {
       backdrop: 'static',
@@ -121,7 +122,9 @@ export class EditEventComponent implements OnInit {
     console.log(error['status']);
     if (error['status'] === 401) {
       console.log("Please Login Calendar");
-      // this.router.navigate([`../login`], { relativeTo: this.route });
+      this.router.navigate([`../login`], { relativeTo: this.route });
+      
+      alert("Not currently Login. Please Login or create account to have full access.");
     //  this.login = "Login";
 
       // alert("Not currently Login. Please Login or create account to have full access.");

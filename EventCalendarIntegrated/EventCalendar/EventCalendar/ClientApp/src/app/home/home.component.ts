@@ -83,7 +83,7 @@ export class HomeComponent {
         }
       }
       this.refresh.next();
-    }, error => console.error(error));
+    }, error => this.errorResponse(error));
   }
 
   setView(view: CalendarView) {
@@ -177,6 +177,7 @@ export class HomeComponent {
     console.log(error['status']);
     if (error['status'] === 401) {
       console.log("Please Login Calendar");
+      alert("Not currently Login. Please Login or create account to have full access.");
       this.router.navigate([`../login`], { relativeTo: this.route });
       //  this.login = "Login";
       if (error['status'] === 403) {
