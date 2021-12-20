@@ -46,7 +46,7 @@ export class HomeComponent {
       backdrop: 'static',
       backdropClass: 'customBackdrop'
     }
-    this.checkLoginState();
+    //this.checkLoginState();
 
 
   }
