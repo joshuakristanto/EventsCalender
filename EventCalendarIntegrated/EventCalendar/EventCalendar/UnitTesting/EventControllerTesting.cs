@@ -34,7 +34,11 @@ namespace EventCalendar.UnitTesting
         // private CalendarEventData eventData =
         //     new CalendarEventData(options => options.UseSqlite("ConnectionStrings:EventDatabase"));
 
+        [TestInitialize]
+        public void Start()
+        {
 
+        }
 
 
         public TestContext TestContext
@@ -384,6 +388,75 @@ namespace EventCalendar.UnitTesting
 
 
 
+        }
+
+        [TestMethod]
+        public void MoqAddTest()
+        {
+            var listEvent = new List<Events>
+            {
+               
+            }.AsQueryable();
+
+            var listEventContents = new List<EventsContents>
+            {
+                
+            }.AsQueryable();
+
+            var mockSet = new Mock<DbSet<EventsContents>>();
+            mockSet.As<IQueryable<EventsContents>>().Setup(m => m.Provider).Returns(listEventContents.Provider);
+            mockSet.As<IQueryable<EventsContents>>().Setup(m => m.Expression).Returns(listEventContents.Expression);
+            mockSet.As<IQueryable<EventsContents>>().Setup(m => m.ElementType).Returns(listEventContents.ElementType);
+            mockSet.As<IQueryable<EventsContents>>().Setup(m => m.GetEnumerator()).Returns(listEventContents.GetEnumerator());
+            var mockSet2 = new Mock<DbSet<Events>>();
+            mockSet2.As<IQueryable<Events>>().Setup(m => m.Provider).Returns(listEvent.Provider);
+            mockSet2.As<IQueryable<Events>>().Setup(m => m.Expression).Returns(listEvent.Expression);
+            mockSet2.As<IQueryable<Events>>().Setup(m => m.ElementType).Returns(listEvent.ElementType);
+            mockSet2.As<IQueryable<Events>>().Setup(m => m.GetEnumerator()).Returns(listEvent.GetEnumerator());
+
+            var mockContext = new Mock<CalendarEventData>();
+            mockContext.Setup(m => m.Events).Returns(mockSet2.Object);
+            mockContext.Setup(m => m.EventsContents).Returns(mockSet.Object);
+
+            /*
+            var events = new Events()
+            {
+
+                Created = DateTime.Now,
+                Year = DateTime.Now.Year,
+                Month = DateTime.Now.Month,
+                Day = DateTime.Now.Day,
+                Items = new List<EventsContents>(),
+                EventId = "112",
+
+            };
+
+            var eventContents = new EventsContents()
+            {
+                Id = "111",
+                Comment = "comment",
+                Title = "title",
+                EventId = "uniqueId",
+                DateCreated = DateTime.Now,
+                Month = DateTime.Now.Month,
+                Day = DateTime.Now.Day,
+                Year = DateTime.Now.Year,
+                Events = events,
+
+            };
+            events.Items.Add(eventContents);
+          mockContext.Object.Events.Add(events);
+            mockContext.Object.EventsContents.Add(eventContents);
+            mockContext.Object.SaveChanges();
+             TestContext.WriteLine("Message..." + mockContext.Object.Events.);
+            */
+            var service = new CalenderEventClass(mockContext.Object);
+
+                   service.AddEvent(DateTime.Parse("2021-11-30T08:00:00"), "Title", "Comment");
+                   service.AddEvent(DateTime.Parse("2021-11-30T08:00:00"), "Title", "Comment");
+                   service.AddEvent(DateTime.Parse("2021-11-30T08:00:00"), "Title", "Comment");
+            
+            mockContext.Verify(m => m.SaveChanges(), Times.Exactly(3));
         }
     }
 }

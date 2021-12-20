@@ -17,8 +17,13 @@ namespace EventCalendar.Models
 {
     public class CalendarEventData : DbContext
     {
-        public DbSet<Events> Events { get; set; }
-        public DbSet<EventsContents> EventsContents { get; set; }
+        public virtual DbSet<Events> Events { get; set; }
+        public virtual DbSet<EventsContents> EventsContents { get; set; }
+
+        public CalendarEventData()
+        {
+
+        }
 
         public CalendarEventData(DbContextOptions<CalendarEventData> options) : base(options) { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

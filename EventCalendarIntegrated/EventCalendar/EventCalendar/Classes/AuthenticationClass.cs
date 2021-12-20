@@ -5,13 +5,30 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using EventCalendar.Identity;
 using EventCalendar.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace EventCalendar.Classes
 {
     public class AuthenticationClass : IAuthentication
     {
+        /*
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        // private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IConfiguration _configuration;
+        private readonly IAuthentication _auth;
+        public  AuthenticationClass(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IAuthentication auth)
+        {
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _configuration = configuration;
+            _auth = auth;
+        }
+        */
         public string GenerateToken(string role)
         {
             SymmetricSecurityKey IssuerSigningKey =
