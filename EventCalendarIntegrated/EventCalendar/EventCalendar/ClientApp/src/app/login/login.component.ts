@@ -39,6 +39,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //alert("Not currently Login. Please Login or create account to have full access.");
   }
 
   signInWithGoogle(): void {

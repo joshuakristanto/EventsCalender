@@ -185,7 +185,7 @@ export class HomeComponent {
     if (error['status'] === 401) {
       console.log("Please Login Calendar");
       this.router.navigate([`../login`], { relativeTo: this.route });
-      alert("Not currently Login. Please Login or create account to have full access.");
+     // alert("Not currently Login. Please Login or create account to have full access.");
       //  this.login = "Login";
       if (error['status'] === 403) {
         alert("You do not have the rights to do this actions. Error 403 Forbidden.");
