@@ -6,7 +6,7 @@
 * Unit Testing
 * Login System
     - Login with Google.
-    - Role Section to Login with Google. 
+    - Role Section on Account Creation and Login.
 * Data Shaped Data flow between Database and Client
 * Integrated Client and Backend. 
 * Hosted in Azure for Cloud and SQL backend by Azure. 
