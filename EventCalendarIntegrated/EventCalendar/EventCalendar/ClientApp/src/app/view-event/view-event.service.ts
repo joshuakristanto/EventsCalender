@@ -41,7 +41,7 @@ export class ViewEventService {
       )
       .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
 
-    return this.http.get<any>(location.origin + "/Events/Day", ({ headers: header, params: param }));
+    return this.http.get<EventView>(location.origin + "/Events/Day", ({ headers: header, params: param }));
 
   }
   output(){
@@ -100,7 +100,7 @@ export class ViewEventService {
       )
       .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
 
-    return this.http.get<any>(location.origin + "/Events/Day", ({ headers: header, params: param }));
+    return this.http.get<EventView>(location.origin + "/Events/Day", ({ headers: header, params: param }));
 
   }
 
@@ -119,4 +119,11 @@ interface EventContents {
   commentedCreated: Date;
   title: string;
   comment: string;
+}
+
+interface EventView{
+  title: string;
+  comment: string;
+  id: string;
+  date: Date;
 }

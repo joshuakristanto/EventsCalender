@@ -62,7 +62,7 @@ export class EditEventsService {
 
 
 
-   return this.http.get<any>(location.origin + "/Events/Day", ({ headers: header, params: param }));
+   return this.http.get<EventFetchDay>(location.origin + "/Events/Day", ({ headers: header, params: param }));
 
   }
 
@@ -78,4 +78,11 @@ interface EventFetch {
 
   title: string;
   comment: string;
+}
+interface EventFetchDay {
+
+  title: string;
+  comment: string;
+  id: string;
+  date: Date;
 }

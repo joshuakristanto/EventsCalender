@@ -61,7 +61,7 @@
   <div [ngSwitch]="view">
 
 
-    <mwl-calendar-month-view (dayClicked)="dayClicked($event.day)" *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events" [refresh]="refresh">
+    <mwl-calendar-month-view (dayClicked)="dayClicked($event.day)" *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events" [refresh]="refresh" >
     </mwl-calendar-month-view>
 
     <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [refresh]="refresh">
@@ -71,5 +71,6 @@
     </mwl-calendar-day-view>
 
   </div>
+  <div> Note: To see different months please click on Previous and Next. Interacting and Loading a different month from the current month is not available.</div>
 </div>
 <router-outlet></router-outlet>

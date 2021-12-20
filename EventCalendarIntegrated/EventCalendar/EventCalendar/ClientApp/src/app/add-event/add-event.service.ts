@@ -44,7 +44,7 @@ export class AddEventService {
 
 
 
-    return this.http.get<any>(location.origin + "/Events/Day", ({ headers: header, params: param }));
+    return this.http.get<EventView>(location.origin + "/Events/Day", ({ headers: header, params: param }));
 
   }
 }
@@ -53,4 +53,10 @@ interface Event {
   date: Date;
   title: string;
   comment: string;
+}
+interface EventView{
+  title: string;
+  comment: string;
+  id: string;
+  date: Date;
 }

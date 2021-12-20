@@ -36,6 +36,14 @@ export class HomeService {
   )
   .append('Authorization', `Bearer ` + localStorage.getItem('jwt'));
 
-  return this.http.get<any>(location.origin+"/Events/Month", ({ headers: header, params: param }));
+  return this.http.get<Event>(location.origin+"/Events/Month", ({ headers: header, params: param }));
   }
+
+  
 }
+
+interface Event {
+  date: Date;
+  title: string;
+}
+

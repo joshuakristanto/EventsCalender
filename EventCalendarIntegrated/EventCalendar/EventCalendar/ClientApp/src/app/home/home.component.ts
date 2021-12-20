@@ -107,8 +107,15 @@ export class HomeComponent {
     }
 
     console.log(date);
+    if(this.currentMonth === date.getMonth())
+    {
+      this.open(Months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear(), "events[0].title", date);
+    
+    }
     // alert(date +" EVENTS" );
-    this.open(Months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear(), "events[0].title", date);
+    else{
+      alert("Please change to "+ Months[date.getMonth()]+".");
+    }
     //this.openAppointmentList(date)
   }
 
@@ -177,8 +184,8 @@ export class HomeComponent {
     console.log(error['status']);
     if (error['status'] === 401) {
       console.log("Please Login Calendar");
-      alert("Not currently Login. Please Login or create account to have full access.");
       this.router.navigate([`../login`], { relativeTo: this.route });
+      alert("Not currently Login. Please Login or create account to have full access.");
       //  this.login = "Login";
       if (error['status'] === 403) {
         alert("You do not have the rights to do this actions. Error 403 Forbidden.");
@@ -187,5 +194,7 @@ export class HomeComponent {
       // this.router.navigate([`../login`], { relativeTo: this.route });
     }
   }
+
+  
 
 }
